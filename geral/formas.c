@@ -4,6 +4,65 @@
 #include "Texto.h"
 #include "Linha.h"
 #include "formas.h"
+#include <string.h>
+
+typedef struct Horta{
+    Forma Figura;
+    double Distancia;
+    double Peso;
+    char typeHort;
+}_horta;
+
+Horta criaHortalica(Forma figura){
+    _horta* aux = calloc(1,sizeof(_horta));
+    aux->Figura = figura;
+    aux->Distancia = 0.0;
+    if(get_type(figura)=='T'){
+        if(strcmp(get_text_texto(figura),"@")){
+            aux->typeHort = 'O';
+            aux->Peso = 0.2;
+        }
+        else if(strcmp(get_text_texto(figura),"*")){
+            aux->typeHort = 'S';
+            aux->Peso = 0.02;
+        }
+        else if(strcmp(get_text_texto(figura),"%")){
+            aux->typeHort = 'C';
+            aux->Peso = 0.2;
+        }
+    }
+    if(get_type(figura)=='R'){
+        aux->typeHort = 'R';
+        aux->Peso = 1.0;
+    }
+    if(get_type(figura)=='C'){
+        aux->typeHort = 'P';
+        aux->Peso = 2.0;
+    }
+        
+    return aux;
+}
+
+Forma get_HortaFigura(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->Figura;
+}
+
+void set_HortaD(Horta hortalica, double Dist){
+    _horta* aux = (_horta*)hortalica;
+    aux->Distancia = Dist; 
+}
+
+double get_HortaD(Horta hortalica){
+    _horta* aux = (_horta*)hortalica; 
+    return aux->Distancia;
+}
+
+bool IsColheitadeira(Forma forma){
+    if(get_type(forma)!= 'R')return false;
+    else if(get_Colheita(forma))return true;
+    else return false;
+}
 
 char get_type(void* point){
 

@@ -3,7 +3,7 @@
 
 #include "radialtree.h"
 #include <stdio.h>
-
+#include "lista.h"
 typedef void* Colheitadeira;
 
 /*Le a linha do arquivo Qry sinalizada com "mv", ao fazer isso busca na lista

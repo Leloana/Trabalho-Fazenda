@@ -4,10 +4,12 @@
 #include <stdlib.h>
 #include "aplicacoes.h"
 
+static RadialTree ReorganizaRadialT(RadialTree t,int num);
+
 typedef struct node{
     
     Info data;
-    struct node* galhos[100];
+    Node* galhos;
     bool removido;
     double x;
     double y;
@@ -21,6 +23,8 @@ typedef struct tree{
     double degradacao;
     double x;
     double y;
+    int celulas;
+    int degeneradas;
 
 }_rTree;
 
@@ -31,12 +35,17 @@ RadialTree newRadialTree(int numSetores, double fd){
     aux->y = 0.00;
     aux->setores = numSetores;
     aux->degradacao = fd;
+    aux->celulas = 0;
+    aux->degeneradas = 0;
+    aux->raiz = NULL;
+
     return aux;
 }
 
 Node insertRadialT(RadialTree t, double x, double y, Info i){
     _rTree* Tree = (_rTree*)t;
     _node* raiz = Tree->raiz;
+    Tree->celulas ++;
     
     if(raiz == NULL){//Checo se arvore possui algum node
         _node* aux = calloc(1,sizeof(_node));//Crio novo node
@@ -44,14 +53,13 @@ Node insertRadialT(RadialTree t, double x, double y, Info i){
         aux->y = y;
         aux->data = i;
         aux->removido = false;
-        for (int i=0; i<Tree->setores; i++) aux->galhos[i] = NULL;//seto todos os setores do node para nulo
-
+        aux->galhos = calloc(Tree->setores,sizeof(Node));//seto todos os setores do node para nulo
         Tree->raiz = aux;//faço a arvore receber seu primeiro node
         return aux;
     }
     else {//Caso arvore ja tenha seu primeiro node é preciso checar em qual setor deste node o proximo se encontra
         int setor = Setor(Tree->setores,raiz->x,raiz->y,x,y);//checa qual setor esta
-        printf("\nSETOR =  %d\n", setor);//debug
+        // printf("\nSETOR =  %d\n", setor);//debug
 
         _rTree aux;//cria arvore auxiliar(serve para funcionar a recursão)
         aux.setores = Tree->setores;
@@ -77,6 +85,7 @@ Node getNodeRadialT(RadialTree t, double x, double y, double epsilon){
 
         _rTree radial_aux;
         radial_aux.setores = Tree->setores;
+        radial_aux.degradacao = Tree->degradacao;
         radial_aux.raiz = aux->galhos[setor];
 
         return getNodeRadialT(&radial_aux, x, y, epsilon);
@@ -84,18 +93,48 @@ Node getNodeRadialT(RadialTree t, double x, double y, double epsilon){
 }
 
 void removeNoRadialT(RadialTree t, Node n){
+    _rTree* Tree = (_rTree*)t;
+
     if(n != NULL){
     _node* aux = (_node*) n;
     aux->removido = true;
+    Tree->degeneradas++;
+        if((double)Tree->degeneradas/Tree->celulas >= (double)Tree->degradacao){
+            int numCels = (int)(Tree->celulas - Tree->degeneradas);
+
+            _rTree* NewTree = (_rTree*)ReorganizaRadialT(Tree, numCels);
+
+
+            Tree->celulas = NewTree->celulas;
+            Tree->degeneradas = 0;
+            Tree->x = NewTree->x;
+            Tree->y = NewTree->y;
+        }
     }
     else printf("REMOCAO INTERROMPIDA!!!");
-    _rTree* aux = (_rTree*) t;
-    if(aux->degradacao > 10){
 
-    }
 }
 
-Info getInfoRadialT(RadialTree t,Node n){
+static RadialTree ReorganizaRadialT(RadialTree t,int num){
+    _rTree* Tree = (_rTree*)t;
+    double centro[2];
+    CentroRadialTree(t, centro); //Definindo centro ficticio do retangulo
+    visitaProfundidadeRadialT(t, AtualizaDistancia, centro); //Definindo Atualizando a distancia entre os nos e esse ponto
+
+    Horta VetorArvore[num]; //Vetor do conteudo da arvore
+    IniciandoVetHort(t, VetorArvore);//Colocando as hortalicas no vetor
+    qsort(VetorArvore, num, sizeof(Info), OrdenaDistancia); //Ordenando o vetor com base na funcao OrdenaDistancia
+
+    RadialTree ArvoreAux = newRadialTree(Tree->setores,Tree->degradacao); //Criando arvore auxiliar
+    for (int i=0; i < num; i++) {
+        insertRadialT(ArvoreAux,get_x(get_HortaFigura(VetorArvore[i])), get_y(get_HortaFigura(VetorArvore[i])), VetorArvore[i]); //Preenchendo arvore auxiliar
+    }
+    //dar free nos nós
+
+    return ArvoreAux;
+}
+
+Info getInfoRadialT(Node n){
     if(n == NULL)return NULL;
     _node* aux = (_node*) n;
     return aux->data;
@@ -107,13 +146,12 @@ bool getNodesDentroRegiaoRadialT(RadialTree t, double x1, double y1, double x2, 
 //usando visita em profundidade
     if(raiz != NULL){
         if(DentroRegiaoRet(raiz->x,raiz->y,x1,y1,x2,y2) && !raiz->removido){
-            printf("Ponto encontrado no Setor!! %lf %lf   \n", raiz->x,raiz->y);
+            // printf("Ponto encontrado no Setor!! %lf %lf   \n", raiz->x,raiz->y);
             insertLst(L,raiz);
         }
         for(int i=0;i<Tree->setores;i++){
         //SE O RETANGULO ESTIVER NESTE SETOR CONTINUE SE NAO VOLTA O LOOP
         if(ChecaRetSetor(raiz->x,raiz->y,x1,y1,x2,y2,Tree->setores,i)){
-            printf("\n ");
 
             _rTree aux;
             aux.raiz = raiz->galhos[i];
@@ -132,8 +170,8 @@ bool getInfosDentroRegiaoRadialT(RadialTree t, double x1, double y1, double x2, 
     
 //usando visita em profundidade
     if(raiz != NULL){
-        if(!raiz->removido && f(getInfoRadialT(t,raiz),x1,x2,y1,y2)){
-            printf("Objeto encontrado no Setor!! %lf %lf \n", raiz->x,raiz->y);
+        if(!raiz->removido && f(raiz->data,x1,x2,y1,y2)){
+            // printf("Objeto encontrado no Setor!! %lf %lf \n", raiz->x,raiz->y);
             insertLst(L,raiz->data);
         }
         printf(" \n ");
@@ -159,7 +197,6 @@ bool getInfosAtingidoPontoRadialT(RadialTree t, double x, double y, FpontoIntern
 
    if(raiz != NULL){
         if(f(raiz->data,x,y)  && !raiz->removido){
-            printf(" %lf %lf \n", raiz->x,raiz->y);
             insertLst(L,raiz->data);
 
         }
@@ -175,20 +212,23 @@ bool getInfosAtingidoPontoRadialT(RadialTree t, double x, double y, FpontoIntern
     else return false;
     
 }
+
 void visitaProfundidadeRadialT(RadialTree t, FvisitaNo f, void *aux){
      _rTree* Tree = (_rTree*)t;
     _node* raiz = Tree->raiz;
 
-    if(raiz==NULL)return;
-
-    f(raiz->data,raiz->x,raiz->y,aux);
+    
+    if(raiz!=NULL){
+        
+    if(!raiz->removido)f(raiz->data,raiz->x,raiz->y,aux);
 
     for(int i=0;i<Tree->setores;i++){
 
         _rTree Taux;
         Taux.raiz = raiz->galhos[i];
         Taux.setores = Tree->setores;
-        visitaProfundidadeRadialT(t,f,aux);
+        visitaProfundidadeRadialT(&Taux,f,aux);
+    }
     }
 
 }
@@ -220,27 +260,23 @@ void visitaLarguraRadialT(RadialTree t, FvisitaNo f, void *aux) {
     }
 }
 
-//ESCREVENDO POR PROFUNDIDADE
-void escreveArvore(RadialTree t){
+Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux){
     _rTree* Tree = (_rTree*)t;
     _node* raiz = Tree->raiz;
 
-    if(raiz == NULL){
-    printf("Node: %d NULL \n",(int)&raiz);
-    return;
-    }
-    else {
-        if(!raiz->removido)printf("Node: %d\n",(int)&raiz);
-        else printf("Node: %d REMOVED \n",(int)&raiz);
-        
-        for(int i=0;i<Tree->setores;i++){
-            if(raiz->galhos[i]){
-            _rTree aux;
-            aux.raiz = raiz->galhos[i];
-            aux.setores = Tree->setores;
-            escreveArvore(&aux);
-            }
-        }
-    }
     
+    if(raiz!=NULL){
+        
+    if(!raiz->removido){
+        if(f(raiz->data,raiz->x,raiz->y,aux))return raiz;
+    }
+
+    for(int i=0;i<Tree->setores;i++){
+
+        _rTree Taux;
+        Taux.raiz = raiz->galhos[i];
+        Taux.setores = Tree->setores;
+        visitaProfundidadeRadialT(&Taux,f,aux);
+    }
+    }
 }

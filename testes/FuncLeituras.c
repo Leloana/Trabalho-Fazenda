@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "arqsvg.h"
 #include "aplicacoes.h"
+
 //PRECISA CHECAR SE ARVORE PRECISA SER REFEITA EM TODO COMANDO
 //Falta MUITA coisa
 void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
@@ -30,18 +31,14 @@ void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
 void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char cardial){
     Retangulo Colheitadeira = NULL;
     Lista analises = createLst(-1);
-    Colheitadeira = achaNaArvore(ID);
+    Colheitadeira = achaIDNaArvore(root,ID);
     if(Colheitadeira == NULL){
         printf("\nERRO NA ENTRADA DA FUNCAO [*]hrv -> ID %d NAO EXISTE\n",ID);
         return;
     }
-    set_Colheita(Colheitadeira, 's');
+    set_Colheita(Colheitadeira, true);
     double Xo = get_x(Colheitadeira);
     double Yo = get_y(Colheitadeira);
-    double Xfinal = 0.0;
-    double Yfinal = 0.0;
-    double Altura = 0.0;
-    double Largura = 0.0;
     /*COLHEITADEIRA COLHE ELEMENTOS POR ONDE ELA PASSA ENTAO EU POSSO:
     1- Criar um retangulo usando os pontos iniciais e finais do retangulo se movimentando
     e analisar a area desse retangulo completamente(GOAT)
@@ -51,70 +48,49 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char cardi
     ESTE CODIGO E REPETITIVO POR ISSO SO O PRIMEIRO ESTA COMENTADO!!!
     */
     if(strcmp(cardial,"n")==0){
-        LinhaMove(txt,root,ID,0.0,-(passos));
+        LinhaMove(txt,root,ID,0.0,-(passos)*get_ret_larg(Colheitadeira));
         /*X,Y,Altura,Largura do retangulo total de colheita
         O retangulo total é composto pelo caminho do retangulo da colheitadeira*/
-        Xfinal = get_x(Colheitadeira);
-        Yfinal = get_y(Colheitadeira);
-        Altura = Yo + get_ret_alt(Colheitadeira) - Yfinal;
-        Largura = get_ret_larg(Colheitadeira);
-        if(getNodesDentroRegiaoRadialT(root,Xfinal,Yfinal,Xfinal+Largura,Yfinal+Altura,analises)){
+        if(getNodesDentroRegiaoRadialT(root,Xo,Yo-passos*get_ret_alt(Colheitadeira),Xo+get_ret_larg(Colheitadeira),Yo,analises)){
             /*A funcao deve ser para pegar os nos, pois é necessario remove-los depois, portanto nao
             ser usada a funcao getInfo...*/
             fold(map(analises,getInfoRadialT),reporta_figura,txt);//reporto a lista modificada que so tem infos
             map(analises,removeNoRadialT);//removo usando map
         }
         else fprintf(txt,"\nNada foi colhido");
-    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" transform = \"rotate (%lf %lf %lf)\" style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
-    Xfinal,Yfinal, Largura, Altura,get_ret_rot(Colheitadeira),Xfinal,Yfinal, "none", "red",5);
+    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
+    Xo,Yo-passos*get_ret_alt(Colheitadeira), get_ret_larg(Colheitadeira), passos*get_ret_alt(Colheitadeira),"none", "red",5);
     }
+
     else if(strcmp(cardial,"s")==0){
-        LinhaMove(txt,root,ID,0.0,(passos));
-        Xfinal = get_x(Colheitadeira);
-        Yfinal = get_y(Colheitadeira);
-        Altura = Yfinal + get_ret_alt(Colheitadeira) - Yo;
-        Largura = get_ret_larg(Colheitadeira);
-        if(getNodesDentroRegiaoRadialT(root,Xfinal,Yfinal,Xfinal+Largura,Yfinal+Altura,analises)){
-            if(getInfosDentroRegiaoRadialT(root,Xfinal,Yfinal,Xfinal+Largura,Yfinal+Altura,DentroRegiaoRet,analises)){
+        LinhaMove(txt,root,ID,0.0,(passos)*get_ret_larg(Colheitadeira));
+        if(getNodesDentroRegiaoRadialT(root,Xo,Yo,Xo+get_ret_larg(Colheitadeira),Yo+passos*(get_ret_alt(Colheitadeira)),analises)){
             fold(map(analises,getInfoRadialT),reporta_figura,txt);
             map(analises,removeNoRadialT);
         }
         else fprintf(txt,"\nNada foi colhido");
-        }
-    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" transform = \"rotate (%lf %lf %lf)\" style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
-    Xfinal,Yfinal, Largura, Altura,get_ret_rot(Colheitadeira),Xfinal,Yfinal, "none", "red",5);
+    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
+    Xo,Yo,get_ret_larg(Colheitadeira), passos*get_ret_alt(Colheitadeira),get_ret_rot(Colheitadeira), "none", "red",5);
     }
     else if(strcmp(cardial,"l")==0){
-        LinhaMove(txt,root,ID,passos,0.0);
-        Xfinal = get_x(Colheitadeira);
-        Yfinal = get_y(Colheitadeira);
-        Altura = get_ret_alt(Colheitadeira);
-        Largura = Xfinal+get_ret_larg(Colheitadeira)-Xo;
-        if(getNodesDentroRegiaoRadialT(root,Xfinal,Yfinal,Xfinal+Largura,Yfinal+Altura,analises)){
-            if(getInfosDentroRegiaoRadialT(root,Xfinal,Yfinal,Xfinal+Largura,Yfinal+Altura,DentroRegiaoRet,analises)){
+        LinhaMove(txt,root,ID,passos*get_ret_alt(Colheitadeira),0.0);
+        if(getNodesDentroRegiaoRadialT(root,Xo-passos*get_ret_larg(Colheitadeira),Yo,Xo+get_ret_larg(Colheitadeira),Yo+get_ret_alt(Colheitadeira),analises)){
             fold(map(analises,getInfoRadialT),reporta_figura,txt);
             map(analises,removeNoRadialT);
         }
         else fprintf(txt,"\nNada foi colhido");
-        }
-    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" transform = \"rotate (%lf %lf %lf)\" style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
-    Xo,Yo, Largura, Altura,get_ret_rot(Colheitadeira),Xo,Yo, "none", "red",5);
+    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" transform = \" style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
+    Xo-passos*get_ret_larg(Colheitadeira),Yo,passos*get_ret_larg(Colheitadeira), get_ret_alt(Colheitadeira), "none", "red",5);
     }
     else if(strcmp(cardial,"o")==0){
-        LinhaMove(txt,root,ID,-(passos),0.0);
-        Xfinal = get_x(Colheitadeira);
-        Yfinal = get_y(Colheitadeira);
-        Altura = get_ret_alt(Colheitadeira);
-        Largura = Xo+get_ret_larg(Colheitadeira)-Xfinal;
-        if(getNodesDentroRegiaoRadialT(root,Xfinal,Yfinal,Xfinal+Largura,Yfinal+Altura,analises)){
-            if(getInfosDentroRegiaoRadialT(root,Xfinal,Yfinal,Xfinal+Largura,Yfinal+Altura,DentroRegiaoRet,analises)){
+        LinhaMove(txt,root,ID,-(passos)*get_ret_alt(Colheitadeira),0.0);
+        if(getNodesDentroRegiaoRadialT(root,Xo,Yo,Xo+passos*(get_ret_larg(Colheitadeira)),Yo+passos*(get_ret_alt(Colheitadeira)),analises)){
             fold(map(analises,getInfoRadialT),reporta_figura,txt);
             map(analises,removeNoRadialT);
         }
         else fprintf(txt,"\nNada foi colhido");
-        }
-    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" transform = \"rotate (%lf %lf %lf)\" style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
-    Xfinal,Yfinal, Largura, Altura,get_ret_rot(Colheitadeira),Xfinal,Yfinal, "none", "red",5);
+    fprintf(svg,"\n\t<rect x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\"  style=\"fill:%s;stroke:%s\" stroke-dasharray=\"%lf\" />",
+    Xo,Yo, passos*get_ret_larg(Colheitadeira), get_ret_alt(Colheitadeira),get_ret_rot(Colheitadeira), "none", "red",5);
     }
     else{
         printf("\nERRO NA ENTRADA DA FUNCAO [*]hrv -> ID %s E UM COMANDO INVALIDO\n",cardial);
@@ -122,6 +98,7 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char cardi
     }
     free(analises);
 }
+
 //FALTA FAZER FUNCAO DE CHECAR SE ESTA 75% DENTRO DA PRAGA "checaDentro75"
 void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio){
     /*Devo posicionar varias pragas circulares de forma a preencher todo o retangulo dado pelos parametros*/
@@ -285,7 +262,7 @@ void ReportaColheitadeiras(FILE* txt,RadialTree root){
 
 bool isColheitadeira(Forma analisa){
     if(get_type(analisa)=='R'){
-        if(get_Colheita(analisa)=='s'){
+        if(get_Colheita(analisa)){
             return true;
         }
         else return false;

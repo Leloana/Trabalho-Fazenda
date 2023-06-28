@@ -13,6 +13,6 @@ na lista "geral", há tambem um comando(ts) que nao gera forma, porem muda a fon
 seguintes textos*/
 void LerGeo(FILE* geo,RadialTree geral);
 
-void LerQry(FILE* qry,FILE* txt, RadialTree root);
+void LerQry(FILE* qry,FILE* txt,FILE* svg, RadialTree root);
 
 #endif

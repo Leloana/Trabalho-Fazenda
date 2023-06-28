@@ -47,8 +47,6 @@ typedef void *RadialTree;
 typedef void *Node;
 typedef void *Info;
 
-void escreveArvore(RadialTree t);
-
 typedef bool (*FdentroDeRegiao)(Info i, double x1, double y1, double x2, double y2);
 /*
  * Uma funcao deste tipo deve retornar verdadeiro se a informacao i esta'
@@ -69,6 +67,15 @@ typedef void (*FvisitaNo)(Info i, double x, double y, void *aux);
  * e' o ponto (x,y). O parametro aux aponta para conjunto de dados
  * (provavelmente um registro) que sao compartilhados entre as
  * sucessivas invocacoes a esta funcao.
+ */
+
+typedef bool (*FsearchNo)(Info i, double x, double y, void *aux);
+/*
+ * Verifica se a informacao i associada a um no' da arvore, cuja ancora
+ * e' o ponto (x,y) e' a informacao procurada. Retorna verdadeiro, em caso
+ * afirmativo; falso, caso contrário. O parametro aux aponta para conjunto de dados
+ * (provavelmente um registro) que sao compartilhados entre as
+ * sucessivas invocacoes a esta funcao, incluindo (provavelmente) uma chave de busca.
  */
 
 RadialTree newRadialTree(int numSetores, double fd);
@@ -98,7 +105,7 @@ void removeNoRadialT(RadialTree t, Node n);
  * superar o limiar definido na criacao, a arvore e' recriada sem os nos delidos.
  */
 
-Info getInfoRadialT(RadialTree t, Node n);
+Info getInfoRadialT(Node n);
 /* Retorna a informacao associada ao no' n */
 
 bool getNodesDentroRegiaoRadialT(RadialTree t, double x1, double y1, double x2, double y2, Lista L);
@@ -132,4 +139,11 @@ void visitaLarguraRadialT(RadialTree t, FvisitaNo f, void *aux);
 /* Similar a visitaProfundidadeRadialT, porem, faz o percurso em largura.
  */
 
+Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux);
+/* Procura o no' da arvore que contenha um dado especifico.
+   Visita cada no' da arvore e invoca a funcao f. A funcao f
+   retornara' verdadeiro se o no' contem o dado procurado.
+   Neste caso, retorna o no' encontrado. Caso a busca falhe,
+   retorna NULL.
+ */
 #endif

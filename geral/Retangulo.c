@@ -3,24 +3,24 @@
 #include "Retangulo.h"
 #include <stdlib.h>
 
+
 typedef struct rect{
 
-    char type, colheitadeira;
+    char type;
+    bool colheitadeira;
     int ID;
     double x, y, larg, alt, rotacao,dasharray;
     char* cor, *corbord;
     
 }ret;
 
-char get_Colheita(Retangulo R){
+bool get_Colheita(Retangulo R){
     ret* aux = (ret*) R;
-
     return aux->colheitadeira;
 }
 
-void set_Colheita(Retangulo R, char state){
+void set_Colheita(Retangulo R,bool state){
     ret* aux = (ret*) R;
-
     aux->colheitadeira = state;
 }
 
@@ -38,7 +38,7 @@ Retangulo criaRect(int id,double x, double y, double larg, double alt,char* corb
     aux->y = y;
     aux->larg = larg;
     aux->alt = alt;
-    aux->colheitadeira = 'n';
+    aux->colheitadeira = false;
     aux->cor = calloc(strlen(corp)+1,sizeof(char));
     strcpy(aux->cor,corp);
     aux->corbord = calloc(strlen(corb)+1,sizeof(char));

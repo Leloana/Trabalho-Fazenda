@@ -20,7 +20,8 @@ void escreveRetanguloSvg(ArqSvg fsvg,Retangulo R);
 void escreveLinhaSvg(ArqSvg fsvg,Linha L);
 //escreve o texto especificado no arquivo svg
 void escreveTextoSvg(ArqSvg fsvg,Texto T);
-// analisa as formas recebidas e escreve-as no svg
-void escreveGeralSvg(ArqSvg fsvg,Forma forma);
-
+// analisa as formas recebidas e escreve-as no svg usando uma lista
+void escreveGeralSvgLista(ArqSvg fsvg,Forma forma);
+// analisa as formas recebidas e escreve-as no svg usando uma Arvore
+void escreveGeralSvgArvore(Horta hortalica,double x, double y, void* svg);
 #endif

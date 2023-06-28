@@ -6,7 +6,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include "FuncLeituras.h"
+#include "formas.h"
+
+#include "FuncLeituras.h"
 
 char** LeituraLinha(FILE *arq, char* palavras[],int *n)
 {
@@ -54,25 +56,26 @@ void LerGeo(FILE* geo,RadialTree geral){
         char ** aux ;
         while(!feof(geo)){//enquanto nao acabar o geo as figuras sao geradas
             aux = LeituraLinha(geo,palavras,&n);//le a linha do geo
+
             if(strcmp(aux[0],"l") == 0){
                 Linha L = criaLinha(atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL), aux[6]);
-
-                // insertRadialT(geral,atoi(aux[1]),(Linha)L);
+                Horta hortalica = criaHortalica(L);
+                insertRadialT(geral,strtod(aux[2],NULL),strtod(aux[3],NULL),hortalica);
 
                 for(int i = 0 ; i < 7;i++)free(aux[i]);//da free nas palavras da linha
             }
             else if(strcmp(aux[0],"r") == 0){
                 Retangulo R = criaRect(atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL),aux[6],aux[7]);
-
-                // insertRadialT(geral,atoi(aux[1]),(Retangulo)R);
+                Horta hortalica = criaHortalica(R);
+                insertRadialT(geral,strtod(aux[2],NULL),strtod(aux[3],NULL),hortalica);
 
                 for(int i = 0 ; i < 8;i++)free(aux[i]);
             }
             else if(strcmp(aux[0],"c") == 0){
                 Circulo C = criaCirc(atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),aux[5],aux[6]);
-                
-                // insertRadialT(geral,atoi(aux[1]),(Circulo)C);
-                
+                Horta hortalica = criaHortalica(C);
+                insertRadialT(geral,strtod(aux[2],NULL),strtod(aux[3],NULL),hortalica);
+
                 for(int i = 0 ; i < 7;i++)free(aux[i]);
             }
             else if(strcmp(aux[0],"ts")==0){
@@ -84,8 +87,8 @@ void LerGeo(FILE* geo,RadialTree geral){
             else if(strcmp(aux[0],"t") == 0){
                 Texto T = criaTexto(atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL),aux[4],aux[5],aux[6], aux[7]);
                 set_text_Style(T, family,weight,size);
-                
-                // insertRadialT(geral,atoi(aux[1]), (Texto)T);
+                Horta hortalica = criaHortalica(T);
+                insertRadialT(geral,strtod(aux[2],NULL),strtod(aux[3],NULL),hortalica);
 
                 for(int i = 0 ; i < 8;i++)free(aux[i]);
             }
@@ -97,7 +100,7 @@ void LerGeo(FILE* geo,RadialTree geral){
     }
 }
 
-void LerQry(FILE* qry,FILE* txt,RadialTree root){
+void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
     char* palavras[100];
     int n;
     if(qry == NULL)printf(" ERRO AO ABRIR ARQUIVO QRY\n");
@@ -108,17 +111,17 @@ void LerQry(FILE* qry,FILE* txt,RadialTree root){
             aux = LeituraLinha(qry, palavras,&n);
             if(strcmp(aux[0], "mv") == 0){
                 fprintf(txt,"\n[*] mv %d %lf %lf", atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));//reporta o comando ao relatorio
-                // LinhaMove(txt,root,atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));
+                LinhaMove(txt,root,atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));
 
                 for(int i = 0;i < 4;i++)free(aux[i]);
             }
             else if(strcmp(aux[0], "hvt") == 0){
                 fprintf(txt,"\n[*] hvt %d %s", atoi(aux[1]),aux[2]);//reporta o comando ao relatorio
-
+                Harvest(txt,svg,root,atoi(aux[1]),atoi(aux[2]),aux[3]);
 
                 for(int i = 0;i < 3;i++)free(aux[i]);
             }
-            else if(strcmp(aux[0], "ct") == 0){
+            else if(strcmp(aux[0], "cl") == 0){
 
                 for(int i = 0;i < 5;i++)free(aux[i]);
             }

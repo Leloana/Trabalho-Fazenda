@@ -3,8 +3,10 @@
 
 #include <stdio.h>
 
+
 typedef void* Forma;
-//'T' = texto, 'C' = circulo, 'R' = retangulo, 'L' = linha, 'B' = Balao, 'S' = Caca
+
+//'T' = texto, 'C' = circulo, 'R' = retangulo, 'L' = linha
 char get_type(void* point);
 // move a forma para (x+dx:y+dy)
 void mvForma(Forma forma, double dx, double dy);
@@ -32,5 +34,17 @@ void set_y(Forma forma, double y);
 void killForma(void* forma);
 /*reporta os dados da figura "guarda_forma"*/
 void reporta_figura(FILE* txt,void* guarda_forma);
+
+typedef void* Horta;
+
+Horta criaHortalica(Forma figura);
+
+Forma get_HortaFigura(Horta hortalica);
+
+void set_HortaD(Horta hortalica, double Dist);
+
+double get_HortaD(Horta hortalica);
+
+bool IsColheitadeira(Forma forma);
 
 #endif

@@ -1,5 +1,4 @@
 #include "aplicacoes.h"
-#include "radialtree.h"
 #include <stdio.h>
 #include <math.h>
 #include "arqsvg.h"
@@ -9,6 +8,15 @@ void Executa_ListaFormas(Lista executada){
     while(!isIteratorEmpty(executada,apaga))killForma(getIteratorNext(executada,apaga));
     killIterator(executada,apaga);
     killLst(executada);
+}
+bool ajudaID(Info i,double x,double y,void* ID){
+    int* id = (int*)ID;
+    if(get_ID(get_HortaFigura(i)) == (int)id)return true;
+    else return false;
+}
+
+Forma achaIDNaArvore(RadialTree t, int ID){
+    return getInfoRadialT(procuraNoRadialT(t,ajudaID,(int)ID)); 
 }
 
 int Setor(int setores, double xCentro, double yCentro, double a, double b) {
@@ -41,8 +49,15 @@ int Setor(int setores, double xCentro, double yCentro, double a, double b) {
 }
 
 bool DentroRegiaoRet(double X,double Y,double x1, double y1, double x2, double y2){
-    if(X >= x2 || X <= x1 || Y >= y1 || Y <= y2)return false;
+    if(X > x2 || X < x1 || Y < y1 || Y > y2)return false;
     else return true;
+}
+
+bool FuncGetInfosDentroRet(void* i,double x1,double y1,double x2,double y2){
+    double X = get_x(i);
+    double Y = get_y(i);
+    if(DentroRegiaoRet(X,Y,x1,y1,x2,y2))return true;
+    else return false;
 }
 
 bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,double y2,int setores,int setorAtual){
@@ -56,112 +71,115 @@ bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,
     vetSetores[1] = Setor(setores,xCentro,yCentro,x1,y1);
     vetSetores[2] = Setor(setores,xCentro,yCentro,x4,y4);
     vetSetores[3] = Setor(setores,xCentro,yCentro,x2,y2);
-    printf(" \n %d -> SETORES DOS VERTICES: ", setorAtual);
-    for(int i=0; i<4;i++)printf(" %d ", vetSetores[i]);
     for(int i=0; i<4;i++){
         if(setorAtual == vetSetores[i]){
-            printf(" P ");
             return true;
         }
     }
+    if(xCentro == x1 && yCentro <= y2 && yCentro >= y1)return true;//Caso esteja na aresta esquerda
+    if(xCentro == x2 && yCentro <= y2 && yCentro >= y1)return true;//Caso esteja na aresta Direita
+    if(xCentro == y1 && yCentro <= x2 && yCentro >= x1)return true;//Caso esteja na aresta superior
+    if(xCentro == y2 && yCentro <= x2 && yCentro >= x1)return true;//Caso esteja na aresta inferior
     //EM RELACAO AO Y
     //arestas laterais
     //Direita continua decrescente(deve ser menor que o X do centro)
     if((x2 > xCentro) && (setorAtual < vetSetores[0] && setorAtual > vetSetores[3])){
-            printf("===> Ad");
             return true;
         }
     //Crescente
     if((x2 < xCentro) && (setorAtual > vetSetores[0] && setorAtual < vetSetores[3])){
-            printf("===> Ac");
             return true;
         }
     //Direita para tras
     if((x2 > xCentro && y3 > yCentro) && (setorAtual < vetSetores[0] || setorAtual > vetSetores[3])){
-            printf("===> A1");
             return true;
         }
     //Esquerda continua decrescente(deve ser menor que o X do centro)
     if((x1 > xCentro) && (setorAtual < vetSetores[1] && setorAtual > vetSetores[2])){
-            printf("===> Bd");
             return true;
         }
     //crescente
     if((x1 < xCentro) && (setorAtual > vetSetores[1] && setorAtual < vetSetores[2])){
-            printf("===> Bc");
             return true;
         }
     //Esquerda para tras
     if((x1 > xCentro && y1 > yCentro) && (setorAtual < vetSetores[1] || setorAtual > vetSetores[2])){
-            printf("===> B1");
             return true;
         }
     //EM RELACAO AO X
     //aresta superior acima do centro
     if( y3 > yCentro ){
         if(setorAtual > vetSetores[0] && setorAtual < vetSetores[1]){
-            printf("===> 1");
             return true;
         }
     }
     //aresta inferior acima do centro
     if( y4 > yCentro ){
         if(setorAtual > vetSetores[3] && setorAtual < vetSetores[2]){
-            printf("===> 2");
             return true;
         }
     }
     //aresta superior abaixo do centro
     if( y3 < yCentro){
         if(setorAtual < vetSetores[0] && setorAtual > vetSetores[1]){
-            printf("===> 3");
             return true;
         }
     }
     //aresta inferior abaixo do centro
     if( y4 < yCentro){
         if(setorAtual > vetSetores[2] && setorAtual < vetSetores[3]){
-            printf("===> 4");
             return true;
         }
     }
-    printf(" FALSE");
     return false;
 } 
+void AtualizaDistancia(Info Hortalica, double x, double y, void* Centro){
+    double* vetor = (double*)Centro;
+    double Distancia = sqrt(pow(vetor[0]-x,2))+(pow(vetor[1]-y,2));
+    set_HortaD(Hortalica,Distancia);
+}
 
-// RadialTree ReorganizaArvore(RadialTree root){
-//     // 1 - Percorrer toda a arvore procurando os pontos mais distantes
-//     double Xmax, Xmin, Ymax, Ymin;
-//     /*
-//     enquanto a arvore nao acabar
-//         se Xatual > Xmax
-//             Xmax = Xatual
-        
-//         se Xatual < Xmin
-//             Xmin = Xatual
+void CentroRadialTree(RadialTree t,double* num){
+    double vertices[4] = {0, 0, 0, 0};
+    visitaProfundidadeRadialT(t, retanguloGalhos, vertices); //Delimitando o retangulo
 
-//         se Yatual > Ymax
-//             Ymax = Yatual
-        
-//         se Yatual > Ymin
-//             Ymin = Yatual
-//     */
-//     // 2 - Baseado nos pontos achar meio imaginario
-//     double XMeio = (Xmax + Xmin) / 2; 
-//     double YMeio = (Ymax + Ymin) / 2; 
-//     /*
-//      3 - Percorrer novamente a arvore toda e alocando num vetor cada nó
-//      baseado na distancia do nó em relacao ao ponto imaginario (Xmeio,Ymeio)
-//     */
-//     void** armazena;
+    num[0] = vertices[2] - (vertices[2] - vertices[0])/2; //Definindo a x do centro
+    num[1] = vertices[3] - (vertices[3] - vertices[1])/2; //Defininfo o y do centro
+}
 
-//     // 4 - Usar esse vetor para recriar nova arvore
-//     // RadialTree nova = newRadialTree( ,0.0);
-//     while(armazena != NULL){ 
-//         int i = 0;
-//         // insertRadialT(nova, , , *(armazena + i));
-//         i++;
-//     }
+void retanguloGalhos(Info i, double x, double y, void* aux) {
+    double* vetor = (double*)aux;
 
-//     // return nova;
-// }
+    //Definindo os pontos extremos de um retangulo, o qual cobre toda uma arvore radial
+    if (x < vetor[0]) vetor[0] = x;
+    if (y > vetor[1]) vetor[1] = y;
+    if (x > vetor[2]) vetor[2] = x;
+    if (y < vetor[3]) vetor[3] = y;
+}
+void IniciandoVetHort(RadialTree t, void* aux) {
+    Horta* vetor = (Horta*)aux;
+    Lista lista = createLst(-1);
+    visitaProfundidadeRadialT(t, ListaDeHort, lista);
+    int tam = lengthLst(lista);
+
+    Iterador K = createIterator(lista, false);
+    Horta item;
+
+    for (int i=0; i<tam; i++){
+        item = getIteratorNext(lista, K);
+        vetor[i] = item;
+    }
+    killIterator(lista, K);
+    killLst(lista);
+}
+
+void ListaDeHort(Info i, double x, double y, Lista aux){
+    insertLst(aux,i);
+}
+
+int OrdenaDistancia(const void* hort1, const void* hort2) {
+
+    if (get_HortaD((Horta)hort1) == get_HortaD((Horta)hort2)) return 0;
+    else if (get_HortaD((Horta)hort1) > get_HortaD((Horta)hort1)) return 1;
+    else return -1;
+}

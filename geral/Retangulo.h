@@ -1,6 +1,8 @@
 #ifndef RET_H
 #define RET_H
 
+#include <stdbool.h>
+
 typedef void* Retangulo;
 
 void killRet(Retangulo R);
@@ -45,8 +47,8 @@ double get_ret_dasharray(Retangulo R);
 //seta novo ID
 void set_ret_ID(Retangulo R, int ID);
 
-char get_Colheita(Retangulo R);
+bool get_Colheita(Retangulo R);
 //s para ser colheitadeira, n para nao ser colheitadeira
-void set_Colheita(Retangulo R, char state);
+void set_Colheita(Retangulo R, bool state);
 
 #endif
