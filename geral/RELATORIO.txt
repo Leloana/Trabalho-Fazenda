@@ -1,131 +1,29 @@
 
-[*] hvt 1 10
-Retangulo ID=1 x= 10.000000 y= 50.000000 altura= 50.000000 largura=20.000000 rotacao= 0.000000 corp= none corb = #800080
-COORDENADA INICIAL = (10.000000,50.000000)
-COORDENADA FINAL = (210.000000,50.000000)
-
 Texto ID=3 x= 10.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
 Texto ID=4 x= 19.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
 Texto ID=5 x= 28.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=6 x= 37.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=7 x= 46.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=8 x= 55.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=9 x= 64.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=10 x= 73.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=11 x= 82.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=12 x= 91.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=13 x= 100.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=14 x= 109.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=15 x= 118.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=16 x= 127.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=17 x= 136.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=18 x= 145.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=19 x= 154.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=20 x= 163.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=21 x= 172.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=22 x= 181.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=23 x= 190.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=24 x= 199.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=25 x= 208.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=26 x= 217.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=27 x= 226.000000 y= 50.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=77 x= 226.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=127 x= 226.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=177 x= 226.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=627 x= 226.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=76 x= 217.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=126 x= 217.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=176 x= 217.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=626 x= 217.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=75 x= 208.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=125 x= 208.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=175 x= 208.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=625 x= 208.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Retangulo ID=1 x= 210.000000 y= 50.000000 altura= 50.000000 largura=20.000000 rotacao= 0.000000 corp= none corb = #800080
-Texto ID=74 x= 199.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=124 x= 199.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=174 x= 199.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=624 x= 199.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=73 x= 190.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=123 x= 190.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=173 x= 190.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=623 x= 190.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=72 x= 181.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=122 x= 181.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=172 x= 181.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=622 x= 181.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=71 x= 172.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=121 x= 172.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=171 x= 172.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=621 x= 172.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=70 x= 163.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=120 x= 163.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=170 x= 163.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=620 x= 163.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=69 x= 154.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=119 x= 154.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=169 x= 154.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=619 x= 154.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=68 x= 145.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=118 x= 145.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=168 x= 145.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=618 x= 145.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=67 x= 136.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=117 x= 136.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=167 x= 136.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=617 x= 136.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=66 x= 127.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=116 x= 127.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=166 x= 127.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=616 x= 127.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=65 x= 118.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=115 x= 118.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=165 x= 118.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=615 x= 118.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=64 x= 109.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=114 x= 109.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=164 x= 109.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=614 x= 109.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=63 x= 100.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=113 x= 100.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=163 x= 100.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=613 x= 100.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=62 x= 91.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=112 x= 91.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=162 x= 91.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=612 x= 91.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=61 x= 82.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=111 x= 82.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=161 x= 82.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=611 x= 82.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=60 x= 73.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=110 x= 73.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=160 x= 73.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=610 x= 73.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=59 x= 64.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=109 x= 64.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=159 x= 64.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=609 x= 64.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=58 x= 55.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=108 x= 55.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=158 x= 55.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=608 x= 55.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=57 x= 46.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=107 x= 46.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=157 x= 46.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=607 x= 46.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=56 x= 37.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=106 x= 37.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=156 x= 37.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
-Texto ID=606 x= 37.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
 Texto ID=55 x= 28.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
+100.000000 Porcento atingida
+
 Texto ID=105 x= 28.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
+100.000000 Porcento atingida
+
 Texto ID=155 x= 28.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
+100.000000 Porcento atingida
+
 Texto ID=605 x= 28.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
+100.000000 Porcento atingida
+
 Texto ID=54 x= 19.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
 Texto ID=104 x= 19.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
+100.000000 Porcento atingida
+
 Texto ID=154 x= 19.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
+100.000000 Porcento atingida
+
 Texto ID=604 x= 19.000000 y= 92.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
+100.000000 Porcento atingida
+
 Texto ID=53 x= 10.000000 y= 59.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
 Texto ID=103 x= 10.000000 y= 68.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *
 Texto ID=153 x= 10.000000 y= 77.000000 corp= #FFAAEE corb= none rotacao= 0.000000 ancora= middle texto= *

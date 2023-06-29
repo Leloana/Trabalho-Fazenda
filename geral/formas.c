@@ -5,6 +5,7 @@
 #include "Linha.h"
 #include "formas.h"
 #include <string.h>
+#include <math.h>
 
 typedef struct Horta{
     Forma Figura;
@@ -19,25 +20,34 @@ Horta criaHortalica(Forma figura){
     aux->Distancia = 0.0;
     if(get_type(figura)=='T'){
         if(strcmp(get_text_texto(figura),"@")){
-            aux->typeHort = 'O';
+            aux->typeHort = 'O';//ONION
             aux->Peso = 0.2;
         }
         else if(strcmp(get_text_texto(figura),"*")){
-            aux->typeHort = 'S';
+            aux->typeHort = 'S';//STRAWBERRY
             aux->Peso = 0.02;
         }
         else if(strcmp(get_text_texto(figura),"%")){
-            aux->typeHort = 'C';
+            aux->typeHort = 'C';//CARROT
             aux->Peso = 0.2;
+        }
+        else{
+            aux->typeHort = 'G';//GRASS
+            aux->Peso = 0.015;
         }
     }
     if(get_type(figura)=='R'){
-        aux->typeHort = 'R';
+        aux->typeHort = 'R';//REPOLHO
         aux->Peso = 1.0;
     }
     if(get_type(figura)=='C'){
-        aux->typeHort = 'P';
+        aux->typeHort = 'P';//PUMPKIM
         aux->Peso = 2.0;
+    }
+        if(get_type(figura)=='L'){
+        aux->typeHort = 'G';//GRASS
+        aux->Peso = 0.010 * sqrt(pow(get_lin_x1(figura)-get_lin_x2(figura),2)+
+        pow(get_lin_y1(figura)-get_lin_y2(figura),2));
     }
         
     return aux;
@@ -56,6 +66,16 @@ void set_HortaD(Horta hortalica, double Dist){
 double get_HortaD(Horta hortalica){
     _horta* aux = (_horta*)hortalica; 
     return aux->Distancia;
+}
+
+double get_HortaPeso(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->Peso; 
+}
+
+void set_HortaPeso(Horta hortalica,double newP){
+    _horta* aux = (_horta*)hortalica; 
+    aux->Peso = newP;
 }
 
 bool IsColheitadeira(Forma forma){
@@ -184,7 +204,7 @@ void killForma(void* forma){
     else if(get_type(forma) == 'T')killTexto(forma);
 }
 
-void reporta_figura(FILE* txt,void* guarda_forma){
+void reporta_figura(void* txt,void* guarda_forma){
     if(guarda_forma == NULL)return;
     if(get_type(guarda_forma) == 'T'){
                 fprintf(txt,"\nTexto ID=%d x= %lf y= %lf corp= %s corb= %s rotacao= %lf ancora= %s texto= %s",get_text_ID(guarda_forma),

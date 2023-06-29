@@ -1,6 +1,5 @@
 #include "aplicacoes.h"
 #include <stdio.h>
-#include <math.h>
 #include "arqsvg.h"
 
 void Executa_ListaFormas(Lista executada){
@@ -9,14 +8,15 @@ void Executa_ListaFormas(Lista executada){
     killIterator(executada,apaga);
     killLst(executada);
 }
+
 bool ajudaID(Info i,double x,double y,void* ID){
-    int* id = (int*)ID;
-    if(get_ID(get_HortaFigura(i)) == (int)id)return true;
+    if(get_ID(get_HortaFigura(i)) == (int)ID)return true;
     else return false;
 }
 
-Forma achaIDNaArvore(RadialTree t, int ID){
-    return getInfoRadialT(procuraNoRadialT(t,ajudaID,(int)ID)); 
+Horta achaIDNaArvore(RadialTree t, int ID){
+    Node procurado = procuraNoRadialT(t,ajudaID,(int)ID);
+    return getInfoRadialT(procurado); 
 }
 
 int Setor(int setores, double xCentro, double yCentro, double a, double b) {
@@ -51,13 +51,6 @@ int Setor(int setores, double xCentro, double yCentro, double a, double b) {
 bool DentroRegiaoRet(double X,double Y,double x1, double y1, double x2, double y2){
     if(X > x2 || X < x1 || Y < y1 || Y > y2)return false;
     else return true;
-}
-
-bool FuncGetInfosDentroRet(void* i,double x1,double y1,double x2,double y2){
-    double X = get_x(i);
-    double Y = get_y(i);
-    if(DentroRegiaoRet(X,Y,x1,y1,x2,y2))return true;
-    else return false;
 }
 
 bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,double y2,int setores,int setorAtual){
@@ -133,6 +126,7 @@ bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,
     }
     return false;
 } 
+
 void AtualizaDistancia(Info Hortalica, double x, double y, void* Centro){
     double* vetor = (double*)Centro;
     double Distancia = sqrt(pow(vetor[0]-x,2))+(pow(vetor[1]-y,2));

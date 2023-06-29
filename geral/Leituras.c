@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "formas.h"
+#include "aplicacoes.h"
 
 #include "FuncLeituras.h"
 
@@ -109,35 +110,57 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
         char ** aux ;
         while(!feof(qry)){//enquanto nao acabar arquivo .qry o banco de dados é manipulado
             aux = LeituraLinha(qry, palavras,&n);
-            if(strcmp(aux[0], "mv") == 0){
-                fprintf(txt,"\n[*] mv %d %lf %lf", atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));//reporta o comando ao relatorio
+            if(strcmp(aux[0], "mv") == 0){//move figuras
+                fprintf(txt,"\n\n[*] mv %d %lf %lf", atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));//reporta o comando ao relatorio
                 LinhaMove(txt,root,atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));
 
                 for(int i = 0;i < 4;i++)free(aux[i]);
             }
-            else if(strcmp(aux[0], "hvt") == 0){
-                fprintf(txt,"\n[*] hvt %d %s", atoi(aux[1]),aux[2]);//reporta o comando ao relatorio
+            else if(strcmp(aux[0], "hvt") == 0){//Colhe
+                fprintf(txt,"\n\n[*] hvt %d %s", atoi(aux[1]),aux[2]);//reporta o comando ao relatorio
                 Harvest(txt,svg,root,atoi(aux[1]),atoi(aux[2]),aux[3]);
 
                 for(int i = 0;i < 3;i++)free(aux[i]);
             }
-            else if(strcmp(aux[0], "cl") == 0){
+            else if(strcmp(aux[0], "cl") == 0){//Seta colheiradeiras
+                fprintf(txt,"\n\n[*] cl %d ", atoi(aux[1]));
+                setColheitadeira(root,atoi(aux[1]));
+
+                for(int i = 0;i < 2;i++)free(aux[i]);
+            }
+            else if(strcmp(aux[0], "ct") == 0){//Cura hortalicas
+                Plague(txt,svg,root,strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
+
+                for(int i = 0;i < 6;i++)free(aux[i]);
+            }
+            else if(strcmp(aux[0], "cr") == 0){//Cura hortalicas
+            
 
                 for(int i = 0;i < 5;i++)free(aux[i]);
             }
-            else if(strcmp(aux[0], "cr") == 0){
+            else if(strcmp(aux[0], "ad") == 0){//aduba hortalicas
 
                 for(int i = 0;i < 5;i++)free(aux[i]);
             }
-            else if(strcmp(aux[0], "ad") == 0){
-
-                for(int i = 0;i < 5;i++)free(aux[i]);
-            }
-            else if(strcmp(aux[0], "st") == 0){
+            else if(strcmp(aux[0], "st") == 0){//dispersa sementes
 
                 for(int i = 0;i < 8;i++)free(aux[i]);
             }
+            else if(strcmp(aux[0], "d?") == 0){//reporta figura i
+                fprintf(txt,"\n\n[*] d? %d ", atoi(aux[1]));
+                reportaDados(txt,root,atoi(aux[1]));
+
+                for(int i = 0;i < 2;i++)free(aux[i]);
+            }
+            else if(strcmp(aux[0], "c?") == 0){//reporta TODAS colheitadeiras
+                fprintf(txt,"\n\n[*] c?");
+                ReportaColheitadeiras(txt,root);
+
+                free(aux[0]);
+            }
             else {
+
+            
                 printf("\nERRO NA ENTRADA DO QRY [*]%s -> COMANDO INVALIDO\n", aux[0]);
                 free(aux[0]); 
             } 

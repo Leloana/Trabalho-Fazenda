@@ -33,18 +33,22 @@ void set_y(Forma forma, double y);
 //Elimina forma
 void killForma(void* forma);
 /*reporta os dados da figura "guarda_forma"*/
-void reporta_figura(FILE* txt,void* guarda_forma);
+void reporta_figura(void* txt,void* guarda_forma);
 
 typedef void* Horta;
-
+//Inicia uma nova hortalica setando seu peso, tipo e seu geo
 Horta criaHortalica(Forma figura);
-
+//retorna o geo da hortalica
 Forma get_HortaFigura(Horta hortalica);
-
+//seta a distancia da hortalica em relaçao ao centro relativo da arvore
 void set_HortaD(Horta hortalica, double Dist);
-
+//retorna a distancia da hortalica em relaçao ao centro relativo da arvore
 double get_HortaD(Horta hortalica);
-
+//retorna o peso da hortalica 
+double get_HortaPeso(Horta hortalica);
+//seta o novo peso(newP) da hortalica
+void set_HortaPeso(Horta hortalica,double newP);
+//retorna true caso a forma analisa seja uma colheitadeira, false caso contrario
 bool IsColheitadeira(Forma forma);
 
 #endif

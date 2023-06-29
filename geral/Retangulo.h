@@ -46,9 +46,9 @@ void set_ret_dasharray(Retangulo R, double array);
 double get_ret_dasharray(Retangulo R);
 //seta novo ID
 void set_ret_ID(Retangulo R, int ID);
-
+//retorna true caso seja colheitadeira, false caso contrario
 bool get_Colheita(Retangulo R);
-//s para ser colheitadeira, n para nao ser colheitadeira
+//true para ser colheitadeira, false para nao ser colheitadeira
 void set_Colheita(Retangulo R, bool state);
 
 #endif

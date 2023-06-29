@@ -33,11 +33,9 @@ void escreveTextoSvg(ArqSvg fsvg,Texto T){
                                      get_text_x(T), get_text_y(T),get_text_Family(T),get_text_Size(T),get_text_Weight(T), get_text_corp(T),get_text_corb(T),get_text_ancora(T),get_text_ancora(T), get_text_rot(T),get_text_x(T), get_text_y(T), get_text_texto(T));
 }
 
-void escreveGeralSvgLista(ArqSvg fsvg,Horta hortalica){
-    Forma forma = get_HortaFigura(hortalica);
-
-    if(get_type(forma) == 'C')escreveCirculoSvg(fsvg, forma);
-    else if(get_type(forma) == 'R')escreveRetanguloSvg(fsvg, forma);
+void escreveGeralSvgLista(ArqSvg fsvg,Forma forma){
+    if(get_type(forma) == 'R')escreveRetanguloSvg(fsvg, forma);
+    else if(get_type(forma) == 'C')escreveCirculoSvg(fsvg, forma);
     else if(get_type(forma) == 'T')escreveTextoSvg(fsvg, forma);
     else if(get_type(forma) == 'L')escreveLinhaSvg(fsvg, forma);
 }

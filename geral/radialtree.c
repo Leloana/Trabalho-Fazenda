@@ -139,6 +139,7 @@ Info getInfoRadialT(Node n){
     _node* aux = (_node*) n;
     return aux->data;
 }
+
 bool getNodesDentroRegiaoRadialT(RadialTree t, double x1, double y1, double x2, double y2, Lista L){
     _rTree* Tree = (_rTree*)t;
     _node* raiz = Tree->raiz;
@@ -264,19 +265,20 @@ Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux){
     _rTree* Tree = (_rTree*)t;
     _node* raiz = Tree->raiz;
 
-    
-    if(raiz!=NULL){
-        
-    if(!raiz->removido){
-        if(f(raiz->data,raiz->x,raiz->y,aux))return raiz;
+    if (raiz == NULL){
+
+    printf("\nERRO: ID %d nao encontrado!!\n", aux);
+    return NULL;
     }
 
+    else if(f(raiz->data,raiz->x,raiz->y,aux)) return raiz;
+    else{
     for(int i=0;i<Tree->setores;i++){
 
         _rTree Taux;
         Taux.raiz = raiz->galhos[i];
         Taux.setores = Tree->setores;
-        visitaProfundidadeRadialT(&Taux,f,aux);
+        return procuraNoRadialT(&Taux,f,aux);
     }
     }
 }

@@ -4,6 +4,7 @@
 #include "arqsvg.h"
 #include "aplicacoes.h"
 #include "Retangulo.h"
+#include <math.h>
 
 void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
     Horta _hortalica = achaIDNaArvore(root,ID);
@@ -23,7 +24,7 @@ void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
     }
     else printf("\nERRO NA ENTRADA DA FUNCAO [*]mv -> ID %d NAO EXISTE\n",ID);
 }
-//TERMINAR LINHAMOVE e fazer func "achaNaArvore"
+
 void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* cardial){
     Lista Nos_Colhidos = createLst(-1);
     Horta _Colhehorta = achaIDNaArvore(root,ID);
@@ -44,6 +45,7 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
         Borda = criaRect(-1,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),get_ret_larg(Colheitadeira),(1+passos)*get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
         escreveRetanguloSvg(svg,Borda);
+        killRet(Borda);
     }
 
     else if(strcmp(cardial,"s")==0){
@@ -54,6 +56,7 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
         Borda = criaRect(-1,Xo,Yo,get_ret_larg(Colheitadeira),(1+passos)*get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
         escreveRetanguloSvg(svg,Borda);
+        killRet(Borda);
     }
     else if(strcmp(cardial,"l")==0){ 
         LinhaMove(txt,root,ID,passos*get_ret_larg(Colheitadeira),0.0);
@@ -63,6 +66,7 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
         Borda = criaRect(-1,Xo,Yo,(1+passos)*get_ret_larg(Colheitadeira),get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
         escreveRetanguloSvg(svg,Borda);
+        killRet(Borda);
     }
 
     else if(strcmp(cardial,"o")==0){
@@ -73,6 +77,7 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
         Borda = criaRect(-1,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),(1+passos)*get_ret_larg(Colheitadeira),get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
         escreveRetanguloSvg(svg,Borda);
+        killRet(Borda);
     }
     else{
         printf("\nERRO NA ENTRADA DA FUNCAO [*]hrv -> %s E UM COMANDO INVALIDO\n",cardial);
@@ -101,21 +106,14 @@ void AnaliseDeColheita(FILE* txt,RadialTree root,double x1, double y1,
     else fprintf(txt,"\nNada foi colhido");
 }
 
-//FALTA FAZER FUNCAO DE CHECAR SE ESTA 75% DENTRO DA PRAGA "checaDentro75"
 void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio){
     /*Devo posicionar varias pragas circulares de forma a preencher todo o retangulo dado pelos parametros*/
     int NumCircV = round(height/(2 *ratio));//Aproximo o numero de circulos inteiros que cabem na vertical do retangulo
     int NumCircH = round(weight/(2 * ratio)); //Aproximo o numero de circulos inteiros que cabem na horizontal do retangulo
     Lista Pragas = createLst(-1);
-    //Inserindo retangulo que demarca a borda
-    Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
-    set_ret_dasharray(Borda,5.0);
-    insertLst(Pragas,Borda);
-
     for(int i = 0; i < NumCircH; i++){
         for(int j = 0; j < NumCircV; j++){
-            Circulo plague = criaCirc(-1,(X+ratio)+(i * 2 * ratio),(Y+ratio)+(j * 2 * ratio),ratio,"red","none");
-            insertLst(Pragas,plague);
+            insertLst(Pragas,criaCirc(-1,(X+ratio)+(i * 2 * ratio),(Y+ratio)+(j * 2 * ratio),ratio,"red","none"));
         }
     }
     /*Metodo de busca possivel:
@@ -132,110 +130,168 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
     if(getNodesDentroRegiaoRadialT(root,X,Y,X+weight,Y+height,Atingidos)){
     Iterador W = createIterator(Atingidos,false);
         while(!isIteratorEmpty(Atingidos,W)){//checa como uma matriz
-            Node No_atual = getIteratorNext(Atingidos,W);
-            Horta Atingido = getInfoRadialT(No_atual);
-            reporta_figura(txt,get_HortaFigura(Atingido));
-            Iterador K = createIterator(Pragas,false);
 
+            Node No_atual = getIteratorNext(Atingidos,W);//Lista de nodes
+            Horta Atingido = getInfoRadialT(No_atual);//Info do node = HORTA
+            reporta_figura(txt,get_HortaFigura(Atingido));//info da Horta = FIGURA
+            Iterador K = createIterator(Pragas,false);
+            double Porcentagem = 0.0;
             while(!isIteratorEmpty(Pragas,K)){
-                Circulo atual = getIteratorNext(Pragas,K);
-                if(checaDentro75(txt,Atingido,atual)){/*Checa se figura foi atingida ao menos 75% pelos circulos da lista
+                Circulo praga_atual = getIteratorNext(Pragas,K);
+                if(checaDentro75(Atingido,praga_atual,&Porcentagem)){/*Checa se figura foi atingida ao menos 75% pelos circulos da lista
                             PRECISA ESCREVER NO TXT QUANTOS % A FIGURA FOI ATINGIDA*/
-                    escreveTextoSvg(svg,criaTexto(-1,get_x(Atingido),get_y(Atingido),"#FF0000","#FF0000","m","x")); 
+                    fprintf(txt,"\n%lf Porcento atingida\n", Porcentagem);
+                    set_HortaPeso(Atingido,get_HortaPeso(Atingido)-get_HortaPeso(Atingido)*Porcentagem);
+
+                    Texto morte = criaTexto(-1,get_x(get_HortaFigura(Atingido)),get_y(get_HortaFigura(Atingido)),"#FF0000","#FF0000","m","x");
+                    escreveTextoSvg(svg,morte);
+                    killTexto(morte); 
+
                     removeNoRadialT(root,No_atual);
                 }
             }
         }
     }
     else printf("\nA praga nao atingiu plantas\n");
+    //Inserindo retangulo que demarca a borda
+    Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
+    set_ret_dasharray(Borda,4.0);
+    insertLst(Pragas,Borda);
     fold(Pragas,escreveGeralSvgLista,svg);
-    free(Atingidos);
+    killLst(Atingidos);
     Executa_ListaFormas(Pragas);
 }
-// //FALTA FAZER FUNCAO DE CHECAR SE ESTA 75% DENTRO DA PRAGA "checaDentroCura"
-// void Cure(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio){
-//     int NumCircV = round(height/(2 *ratio));//Aproximo o numero de circulos inteiros que cabem na vertical do retangulo
-//     int NumCircH = round(weight/(2 * ratio)); //Aproximo o numero de circulos inteiros que cabem na horizontal do retangulo
-//     Lista Pragas = createLst(-1);
-//     //Inserindo retangulo que demarca a borda
-//     Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
-//     set_ret_dasharray(Borda,5.0);
-//     insertLst(Pragas,Borda);
 
-//     for(int i = 0; i < NumCircH; i++){
-//         for(int j = 0; j < NumCircV; j++){
-//             Circulo plague = criaCirc(-1,(X+ratio)+(i * 2 * ratio),(Y+ratio)+(j * 2 * ratio),ratio,"yellow","none");
-//             insertLst(Pragas,plague);
-//         }
-//     }
-//     Lista Atingidos = createLst(-1);
+bool checaDentro75(void* Atingido,void* Praga_Atual,double* acerto){
+    Forma Figura = get_HortaFigura(Atingido);
+    *acerto = 0.0;
+    if(get_type(Figura)=='C'){//ABOBORA
+        
+    }
+    else if(get_type(Figura)=='R' && !IsColheitadeira(Figura)){//REPOLHO
+
+    }
+    else if(get_type(Figura)=='T'){//Morango,cenoura,cebola,mato
+        double distancia = sqrt(pow(get_x(Figura)-get_x(Praga_Atual),2)+
+        pow(get_y(Figura)-get_y(Praga_Atual),2));
+        if(distancia <= get_circ_r(Praga_Atual)){
+        *acerto = 100;
+        return true;
+        }
+        else return false; 
+    }
+    else if(get_type(Figura)=='L'){//mato
+        double tamanhoLin = sqrt(pow(get_lin_x1(Figura)-get_lin_x2(Praga_Atual),2)+
+        pow(get_lin_y1(Figura)-get_lin_y2(Praga_Atual),2));
+
+    }
+}
+
+void Cure(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio){
+    int NumCircV = round(height/(2 *ratio));//Aproximo o numero de circulos inteiros que cabem na vertical do retangulo
+    int NumCircH = round(weight/(2 * ratio)); //Aproximo o numero de circulos inteiros que cabem na horizontal do retangulo
+    Lista Curas = createLst(-1);
+
+    for(int i = 0; i < NumCircH; i++){
+        for(int j = 0; j < NumCircV; j++){
+            Circulo inseticida = criaCirc(-1,(X+ratio)+(i * 2 * ratio),(Y+ratio)+(j * 2 * ratio),ratio,"yellow","none");
+            insertLst(Curas,inseticida);
+        }
+    }
+    Lista Atingidos = createLst(-1);
+    /*A busca adotada consiste em fixar em uma hortaliça e percorrer por todas as pragas(circulos)
+    analisando quantos% da figura foi atingida pelos circulos*/
+    if(getNodesDentroRegiaoRadialT(root,X,Y,X+weight,Y+height,Atingidos)){
+    Iterador W = createIterator(Atingidos,false);
+        while(!isIteratorEmpty(Atingidos,W)){//checa como uma matriz
+
+            Node No_atual = getIteratorNext(Atingidos,W);//Lista de nodes
+            Horta Atingido = getInfoRadialT(No_atual);//Info do node = HORTA
+            reporta_figura(txt,get_HortaFigura(Atingido));//info da Horta = FIGURA
+            Iterador K = createIterator(Curas,false);
+            double Porcentagem = 0.0;
+            while(!isIteratorEmpty(Curas,K)){
+                Circulo inseticida_atual = getIteratorNext(Curas,K);
+                if(checaDentro75(Atingido,inseticida_atual,&Porcentagem)){/*Checa se figura foi atingida ao menos 75% pelos circulos da lista
+                            PRECISA ESCREVER NO TXT QUANTOS % A FIGURA FOI ATINGIDA*/
+                    fprintf(txt,"\n%lf Porcento atingida\n", Porcentagem);
+                    set_HortaPeso(Atingido,get_HortaPeso(Atingido)+get_HortaPeso(Atingido)*Porcentagem);
+                }
+            }
+        }
+    }
+    else printf("\nO inseticida nao atingiu plantas\n");
+    //Inserindo retangulo que demarca a borda
+    Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
+    set_ret_dasharray(Borda,5.0);
+    insertLst(Curas,Borda);
+    fold(Curas,escreveGeralSvgLista,svg);
+    killLst(Atingidos);
+    Executa_ListaFormas(Curas);
+}
+
+void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio){
+    int NumCircV = round(height/(2 *ratio));//Aproximo o numero de circulos inteiros que cabem na vertical do retangulo
+    int NumCircH = round(weight/(2 * ratio)); //Aproximo o numero de circulos inteiros que cabem na horizontal do retangulo
+    Lista Adubos = createLst(-1);
+
+    for(int i = 0; i < NumCircH; i++){
+        for(int j = 0; j < NumCircV; j++){
+            Circulo adubo = criaCirc(-1,(X+ratio)+(i * 2 * ratio),(Y+ratio)+(j * 2 * ratio),ratio,"green","none");
+            insertLst(Adubos,adubo);
+        }
+    }
+
+    Lista Atingidos = createLst(-1);
     
-//     if(getNodesDentroRegiaoRadialT(root,X,Y,X+weight,Y+height,Atingidos)){
-//     Iterador W = createIterator(Atingidos,false);
-//         while(!isIteratorEmpty(Atingidos,W)){
-//             Node No_atual = getIteratorNext(Atingidos,W);
-//             Forma Atingido = getInfoRadialT(root,No_atual);
-//             reporta_figura(txt,Atingido);
-//             Iterador K = createIterator(Pragas,false);
+    if(getNodesDentroRegiaoRadialT(root,X,Y,X+weight,Y+height,Atingidos)){
+        Iterador W = createIterator(Atingidos,false);
+        while(!isIteratorEmpty(Atingidos,W)){//checa como uma matriz
 
-//             while(!isIteratorEmpty(Pragas,K)){
-//                 Circulo atual = getIteratorNext(Pragas,K);
-//                 if(checaDentroCura(txt,Atingido,atual)){/*Checa se figura foi atingida ao menos 75% pelos circulos da lista
-//                     Cura baseado na % PRECISA ESCREVER NO TXT QUANTOS % A FIGURA FOI ATINGIDA*/
-//                     escreveTextoSvg(svg,criaTexto(-1,get_x(Atingido),get_y(Atingido),"#FF0000","#FF0000","m","x")); 
-//                     removeNoRadialT(root,No_atual);
-//                 }
-//             }
-//         }
-//     }
-//     else printf("\nO inseticida nao atingiu plantas\n");
-//     fold(Pragas,escreveGeralSvg,svg);
-//     free(Atingidos);
-//     Executa_ListaFormas(Pragas);
-// }
-// //FALTA FAZER FUNCAO DE CHECAR SE ESTA ->>>>COMPLETAMENTE<<<<- DENTRO DA PRAGA "checaDentroAdubo"
-// void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio){
-//     int NumCircV = round(height/(2 *ratio));//Aproximo o numero de circulos inteiros que cabem na vertical do retangulo
-//     int NumCircH = round(weight/(2 * ratio)); //Aproximo o numero de circulos inteiros que cabem na horizontal do retangulo
-//     Lista Pragas = createLst(-1);
-//     //Inserindo retangulo que demarca a borda
-//     Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
-//     set_ret_dasharray(Borda,5.0);
-//     insertLst(Pragas,Borda);
+            Node No_atual = getIteratorNext(Atingidos,W);//Lista de nodes
+            Horta Atingido = getInfoRadialT(No_atual);//Info do node = HORTA
+            reporta_figura(txt,get_HortaFigura(Atingido));//info da Horta = FIGURA
+            Iterador K = createIterator(Adubos,false);
+            while(!isIteratorEmpty(Adubos,K)){
+                Circulo adubo_atual = getIteratorNext(Adubos,K);
+                if(checaDentroAdubo(Atingido,adubo_atual)){
+                    set_HortaPeso(Atingido,get_HortaPeso(Atingido)+get_HortaPeso(Atingido)*0.1);
+                }
+            }
+        }
+    }
+    else printf("\nO fertilizante nao atingiu plantas\n");
+    //Inserindo retangulo que demarca a borda
+    Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
+    set_ret_dasharray(Borda,5.0);
+    insertLst(Adubos,Borda);
+    fold(Adubos,escreveGeralSvgLista,svg);
+    killLst(Atingidos);
+    Executa_ListaFormas(Adubos);
+}
 
-//     for(int i = 0; i < NumCircH; i++){
-//         for(int j = 0; j < NumCircV; j++){
-//             Circulo plague = criaCirc(-1,(X+ratio)+(i * 2 * ratio),(Y+ratio)+(j * 2 * ratio),ratio,"green","none");
-//             insertLst(Pragas,plague);
-//         }
-//     }
+bool checaDentroAdubo(Horta atingida, Forma adubo){
+    Forma Figura = get_HortaFigura(atingida);
 
-//     Lista Atingidos = createLst(-1);
-    
-//     if(getNodesDentroRegiaoRadialT(root,X,Y,X+weight,Y+height,Atingidos)){
-//     Iterador W = createIterator(Atingidos,false);
-//         while(!isIteratorEmpty(Atingidos,W)){
-//             Node No_atual = getIteratorNext(Atingidos,W);
-//             Forma Atingido = getInfoRadialT(root,No_atual);
-//             reporta_figura(txt,Atingido);
-//             Iterador K = createIterator(Pragas,false);
+    if(get_type(Figura)=='C'){//ABOBORA
+        
+    }
+    else if(get_type(Figura)=='R' && !IsColheitadeira(Figura)){//REPOLHO
 
-//             while(!isIteratorEmpty(Pragas,K)){
-//                 Circulo atual = getIteratorNext(Pragas,K);
-//                 if(checaDentroAdubo(txt,Atingido,atual)){/*Checa se figura foi atingida COMPLETAMENTE pelos circulos da lista
-//                     Produtividade aumenta 10% se atingida PRECISA ESCREVER NO TXT QUANTOS % A FIGURA FOI ATINGIDA*/
-//                     escreveTextoSvg(svg,criaTexto(-1,get_x(Atingido),get_y(Atingido),"#FF0000","#FF0000","m","x")); 
-//                     removeNoRadialT(root,No_atual);
-//                 }
-//             }
-//         }
-//     }
-//     else printf("\nO fertilizante nao atingiu plantas\n");
-//     fold(Pragas,escreveGeralSvg,svg);
-//     free(Atingidos);
-//     Executa_ListaFormas(Pragas);
-// }
-// //A TERMINAR (FALTA INFO DO EVANDRO)
+    }
+    else if(get_type(Figura)=='T'){//Morango,cenoura,cebola,mato
+        double distancia = sqrt(pow(get_x(Figura)-get_x(adubo),2)+
+        pow(get_y(Figura)-get_y(adubo),2));
+        if(distancia <= get_circ_r(adubo))return true;
+        else return false; 
+    }
+    else if(get_type(Figura)=='L'){//mato
+        double tamanhoLin = sqrt(pow(get_lin_x1(Figura)-get_lin_x2(adubo),2)+
+        pow(get_lin_y1(Figura)-get_lin_y2(adubo),2));
+
+    }
+}
+
 // void seeding(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double Dx, double Dy, int j){
 //     Lista decoracoes = createLst(-1);
 //     Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
@@ -248,16 +304,30 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
 
 //     }
 
-//     fold(decoracoes,escreveGeralSvg,svg);
+//     fold(decoracoes,escreveGeralSvgLista,svg);
 //     Executa_ListaFormas(decoracoes);
 // }
 
-// void Dados(FILE* txt,RadialTree root,int ID){
-//     Forma reportada = achaNaArvore(ID);;
-//     reporta_figura(txt,reportada);
-// }
+void reportaDados(FILE* txt,RadialTree root,int ID){
+    Horta busca = achaIDNaArvore(root,ID);
+    Forma Reportada = get_HortaFigura(busca);
 
-// void ReportaColheitadeiras(FILE* txt,RadialTree root){
-//     /*PERCORRER TODA A ARVORE E CHECAR SE SAO COLHEITADEIRAS
-//     Usar while na arvore ou sla, tranformar a arvore numa lista*/
-// }
+    reporta_figura(txt,Reportada);
+}
+
+void ReportaColheitadeiras(FILE* txt,RadialTree root){
+    visitaProfundidadeRadialT(root,RepColhe,txt);
+}
+
+void RepColhe(Info i,double x,double y,void* aux){
+    Forma Colheitadeira = get_HortaFigura(i);
+    if(IsColheitadeira(Colheitadeira)){
+        reporta_figura(aux,Colheitadeira);
+    }
+}
+
+void setColheitadeira(RadialTree root,int ID){
+    Horta Ret = achaIDNaArvore(root,ID);
+    Retangulo Colheitadeira = get_HortaFigura(Ret);
+    set_Colheita(Colheitadeira,true);
+}

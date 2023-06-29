@@ -12,7 +12,8 @@ char** LeituraLinha(FILE *arq, char* palavras[],int *n);
 na lista "geral", há tambem um comando(ts) que nao gera forma, porem muda a fonte dos
 seguintes textos*/
 void LerGeo(FILE* geo,RadialTree geral);
-
+/*Le arquivo Qry e baseado em seus comandos gera modificaçoes nos objetos do banco de dados
+criado pela funcao "LerGeo"*/
 void LerQry(FILE* qry,FILE* txt,FILE* svg, RadialTree root);
 
 #endif
