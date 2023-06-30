@@ -10,12 +10,16 @@ void Executa_ListaFormas(Lista executada){
 }
 
 bool ajudaID(Info i,double x,double y,void* ID){
-    if(get_ID(get_HortaFigura(i)) == (int)ID)return true;
+    if(get_ID(get_HortaFigura(i)) == ID)return true;
     else return false;
 }
 
 Horta achaIDNaArvore(RadialTree t, int ID){
     Node procurado = procuraNoRadialT(t,ajudaID,(int)ID);
+    if(procurado == NULL){
+        printf("\nID %d NAO ENCONTRADO\n", ID);
+        return NULL;
+    }
     return getInfoRadialT(procurado); 
 }
 

@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="-110 -110 600 500" xmlns="http://www.w3.org/2000/svg">
-	<text x="28.000000" y="59.000000" font-family="sans (sans-serif)" font-size="16px" font-weight="normal" fill="#FF0000" stroke="#FF0000" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 59.000000)" >x</text>
-	<text x="28.000000" y="68.000000" font-family="sans (sans-serif)" font-size="16px" font-weight="normal" fill="#FF0000" stroke="#FF0000" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 68.000000)" >x</text>
-	<text x="28.000000" y="77.000000" font-family="sans (sans-serif)" font-size="16px" font-weight="normal" fill="#FF0000" stroke="#FF0000" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 77.000000)" >x</text>
-	<text x="28.000000" y="92.000000" font-family="sans (sans-serif)" font-size="16px" font-weight="normal" fill="#FF0000" stroke="#FF0000" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 92.000000)" >x</text>
-	<text x="19.000000" y="68.000000" font-family="sans (sans-serif)" font-size="16px" font-weight="normal" fill="#FF0000" stroke="#FF0000" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 68.000000)" >x</text>
-	<text x="19.000000" y="77.000000" font-family="sans (sans-serif)" font-size="16px" font-weight="normal" fill="#FF0000" stroke="#FF0000" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 77.000000)" >x</text>
-	<text x="19.000000" y="92.000000" font-family="sans (sans-serif)" font-size="16px" font-weight="normal" fill="#FF0000" stroke="#FF0000" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 92.000000)" >x</text>
 	<circle cx="15.000000" cy="55.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 15.000000 55.000000)" fill="none" />
 	<circle cx="15.000000" cy="65.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 15.000000 65.000000)" fill="none" />
 	<circle cx="15.000000" cy="75.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 15.000000 75.000000)" fill="none" />
@@ -17,7 +10,22 @@
 	<circle cx="25.000000" cy="75.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 25.000000 75.000000)" fill="none" />
 	<circle cx="25.000000" cy="85.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 25.000000 85.000000)" fill="none" />
 	<circle cx="25.000000" cy="95.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 25.000000 95.000000)" fill="none" />
-	<rect x="10.000000" y="50.000000" width="20.000000" height="50.000000" transform = "rotate (0.000000 10.000000 50.000000)" style="fill:none;stroke:red" stroke-dasharray="4.000000" />
+	<circle cx="35.000000" cy="55.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 35.000000 55.000000)" fill="none" />
+	<circle cx="35.000000" cy="65.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 35.000000 65.000000)" fill="none" />
+	<circle cx="35.000000" cy="75.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 35.000000 75.000000)" fill="none" />
+	<circle cx="35.000000" cy="85.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 35.000000 85.000000)" fill="none" />
+	<circle cx="35.000000" cy="95.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 35.000000 95.000000)" fill="none" />
+	<circle cx="45.000000" cy="55.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 45.000000 55.000000)" fill="none" />
+	<circle cx="45.000000" cy="65.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 45.000000 65.000000)" fill="none" />
+	<circle cx="45.000000" cy="75.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 45.000000 75.000000)" fill="none" />
+	<circle cx="45.000000" cy="85.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 45.000000 85.000000)" fill="none" />
+	<circle cx="45.000000" cy="95.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 45.000000 95.000000)" fill="none" />
+	<circle cx="55.000000" cy="55.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 55.000000 55.000000)" fill="none" />
+	<circle cx="55.000000" cy="65.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 55.000000 65.000000)" fill="none" />
+	<circle cx="55.000000" cy="75.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 55.000000 75.000000)" fill="none" />
+	<circle cx="55.000000" cy="85.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 55.000000 85.000000)" fill="none" />
+	<circle cx="55.000000" cy="95.000000" r="5.000000" stroke="red" transform = "rotate (0.000000 55.000000 95.000000)" fill="none" />
+	<rect x="10.000000" y="50.000000" width="50.000000" height="50.000000" transform = "rotate (0.000000 10.000000 50.000000)" style="fill:none;stroke:red" stroke-dasharray="4.000000" />
 	<text x="10.000000" y="50.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 10.000000 50.000000)" >*</text>
 	<text x="19.000000" y="50.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 50.000000)" >*</text>
 	<text x="28.000000" y="50.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 50.000000)" >*</text>
@@ -1197,10 +1205,17 @@
 	<text x="37.000000" y="101.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 37.000000 101.000000)" >*</text>
 	<text x="37.000000" y="110.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 37.000000 110.000000)" >*</text>
 	<text x="37.000000" y="119.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 37.000000 119.000000)" >*</text>
+	<text x="28.000000" y="59.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 59.000000)" >*</text>
+	<text x="28.000000" y="68.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 68.000000)" >*</text>
+	<text x="28.000000" y="77.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 77.000000)" >*</text>
+	<text x="28.000000" y="92.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 92.000000)" >*</text>
 	<text x="28.000000" y="101.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 101.000000)" >*</text>
 	<text x="28.000000" y="110.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 110.000000)" >*</text>
 	<text x="28.000000" y="119.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 28.000000 119.000000)" >*</text>
 	<text x="19.000000" y="59.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 59.000000)" >*</text>
+	<text x="19.000000" y="68.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 68.000000)" >*</text>
+	<text x="19.000000" y="77.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 77.000000)" >*</text>
+	<text x="19.000000" y="92.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 92.000000)" >*</text>
 	<text x="19.000000" y="101.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 101.000000)" >*</text>
 	<text x="19.000000" y="110.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 110.000000)" >*</text>
 	<text x="19.000000" y="119.000000" font-family="sans" font-size="10pt" font-weight="b+" fill="#FFAAEE" stroke="none" text-anchor = "middle" dominant-baseline="middle" transform = "rotate (0.000000 19.000000 119.000000)" >*</text>

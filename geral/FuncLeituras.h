@@ -41,5 +41,9 @@ void ReportaColheitadeiras(FILE* txt,RadialTree root);
 /*Funcao auxiliar a "ReportaColheitadeiras", ao identificar o objeto analisado como uma colheitadeira, reporta-o*/
 void RepColhe(Info i,double x,double y,void* aux);
 
+void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio);
+
+bool checaDentroAdubo(Horta atingida, Forma adubo);
+
 
 #endif

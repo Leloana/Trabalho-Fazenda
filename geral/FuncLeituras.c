@@ -138,18 +138,19 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
             double Porcentagem = 0.0;
             while(!isIteratorEmpty(Pragas,K)){
                 Circulo praga_atual = getIteratorNext(Pragas,K);
-                if(checaDentro75(Atingido,praga_atual,&Porcentagem)){/*Checa se figura foi atingida ao menos 75% pelos circulos da lista
-                            PRECISA ESCREVER NO TXT QUANTOS % A FIGURA FOI ATINGIDA*/
-                    fprintf(txt,"\n%lf Porcento atingida\n", Porcentagem);
-                    set_HortaPeso(Atingido,get_HortaPeso(Atingido)-get_HortaPeso(Atingido)*Porcentagem);
+                if(checaDentro75(Atingido,praga_atual,&Porcentagem)){
 
+                set_HortPraga(Atingido,get_HortPraga(Atingido)+Porcentagem);
+                if(get_HortPraga(Atingido) > 0.75){
                     Texto morte = criaTexto(-1,get_x(get_HortaFigura(Atingido)),get_y(get_HortaFigura(Atingido)),"#FF0000","#FF0000","m","x");
                     escreveTextoSvg(svg,morte);
-                    killTexto(morte); 
-
                     removeNoRadialT(root,No_atual);
+                    killTexto(morte); 
+                    break;
+                }
                 }
             }
+            fprintf(txt,"\n%g Porcento atingida\n", Porcentagem);
         }
     }
     else printf("\nA praga nao atingiu plantas\n");
@@ -164,26 +165,64 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
 
 bool checaDentro75(void* Atingido,void* Praga_Atual,double* acerto){
     Forma Figura = get_HortaFigura(Atingido);
-    *acerto = 0.0;
+    double PragaX = get_circ_cx(Praga_Atual);
+    double PragaY = get_circ_cy(Praga_Atual);
+    double PragaR = get_circ_r(Praga_Atual);
     if(get_type(Figura)=='C'){//ABOBORA
-        
+        double DistCentros = sqrt(pow(get_x(Figura)-PragaX,2)+pow(get_y(Figura)-PragaY,2));
+        double MenorRaio = PragaR;//Precisa-se saber quais sao os raios maiores e menores
+        double MaiorRaio = PragaR;
+        if(get_circ_r(Figura) > PragaR){
+            MenorRaio = PragaR;
+            MaiorRaio = get_circ_r(Figura);
+        }
+        if(DistCentros + MenorRaio < MaiorRaio){//caso a distancia entre centros+Raio, seja menor que MaiorRaio esta dentro
+            *acerto += pi*pow(PragaR,2)/pi*pow(get_circ_r(Figura),2);//Acerto recebe % baseado em quanto a praga acertou
+            return true;
+        }
+        else return false;
     }
     else if(get_type(Figura)=='R' && !IsColheitadeira(Figura)){//REPOLHO
-
+        if(DentroRegiaoRet(PragaX,PragaY,get_x(Figura),get_y(Figura),
+        get_x(Figura)+get_ret_larg(Figura),get_y(Figura)+get_ret_alt(Figura))){//Se o ponto central da praga estiver no retangulo
+            //Caso o CIRCULO tenha ALGUMA parte fora do RETANGULO
+            if(PragaX + PragaR >= get_x(Figura)+get_ret_larg(Figura) || PragaX - PragaR <= get_x(Figura) ||
+            PragaY + PragaR >= get_y(Figura)+get_ret_alt(Figura) || PragaY-PragaR <= get_y(Figura))return false;
+            //caso o RETANGULO esteja TOTALMENTE DENTRO do CIRCULO
+            // else if(PragaX + PragaR >= get_x(Figura)+get_ret_larg(Figura) && PragaX - PragaR <= get_x(Figura) &&
+            // PragaY + PragaR >= get_y(Figura)+get_ret_alt(Figura) && PragaY-PragaR <= get_y(Figura)){
+            //     (*acerto) =+ 0.1;
+            //     return true;
+            // }
+            //Caso o CIRCULO esteja TOTALMENTE DENTRO do RETANGULO
+            else{
+                (*acerto) =+ pi*pow(PragaR,2)/get_ret_alt(Figura)*get_ret_larg(Figura);
+                return true;
+            }
+        }
+        else return false;
     }
     else if(get_type(Figura)=='T'){//Morango,cenoura,cebola,mato
-        double distancia = sqrt(pow(get_x(Figura)-get_x(Praga_Atual),2)+
-        pow(get_y(Figura)-get_y(Praga_Atual),2));
-        if(distancia <= get_circ_r(Praga_Atual)){
-        *acerto = 100;
-        return true;
+        double distancia = sqrt(pow(get_x(Figura)-PragaX,2)+pow(get_y(Figura)-PragaY,2));
+        if(distancia < PragaR){//Se a distancia entre o centro da praga e o texto for menor que o raio esta dentro
+            *acerto += 0.1;
+            return true;
         }
         else return false; 
     }
     else if(get_type(Figura)=='L'){//mato
-        double tamanhoLin = sqrt(pow(get_lin_x1(Figura)-get_lin_x2(Praga_Atual),2)+
-        pow(get_lin_y1(Figura)-get_lin_y2(Praga_Atual),2));
-
+        double tamanhoLin = sqrt(pow(get_lin_x1(Figura)-get_lin_x2(Figura),2)+
+        pow(get_lin_y1(Figura)-get_lin_y2(Figura),2));
+        double DistCentro1 = sqrt(pow(get_lin_x1(Figura)-PragaX,2)+
+        pow(get_lin_y1(Figura)-PragaY,2));
+        double DistCentro2 = sqrt(pow(get_lin_x2(Figura)-PragaX,2)+
+        pow(get_lin_y2(Figura)-PragaY,2));
+        //Verifico se a distancia entre o centro da praga e as extremidades da reta sao menores que o Diametro se sim esta dentro
+        if(DistCentro1+DistCentro2 < 2 * PragaR){
+            *acerto += 0.1;
+            return true;
+        }
+        else return false; 
     }
 }
 
@@ -212,12 +251,10 @@ void Cure(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,d
             double Porcentagem = 0.0;
             while(!isIteratorEmpty(Curas,K)){
                 Circulo inseticida_atual = getIteratorNext(Curas,K);
-                if(checaDentro75(Atingido,inseticida_atual,&Porcentagem)){/*Checa se figura foi atingida ao menos 75% pelos circulos da lista
-                            PRECISA ESCREVER NO TXT QUANTOS % A FIGURA FOI ATINGIDA*/
-                    fprintf(txt,"\n%lf Porcento atingida\n", Porcentagem);
-                    set_HortaPeso(Atingido,get_HortaPeso(Atingido)+get_HortaPeso(Atingido)*Porcentagem);
-                }
+                checaDentro75(Atingido,inseticida_atual,&Porcentagem);
             }
+            if(get_HortPraga(Atingido) > 0.0)set_HortPraga(Atingido,get_HortPraga(Atingido)-Porcentagem);
+            fprintf(txt,"\n%g Porcento atingida\n", Porcentagem);
         }
     }
     else printf("\nO inseticida nao atingiu plantas\n");
@@ -255,7 +292,7 @@ void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double w
             while(!isIteratorEmpty(Adubos,K)){
                 Circulo adubo_atual = getIteratorNext(Adubos,K);
                 if(checaDentroAdubo(Atingido,adubo_atual)){
-                    set_HortaPeso(Atingido,get_HortaPeso(Atingido)+get_HortaPeso(Atingido)*0.1);
+                    set_HortAdubo(Atingido,get_HortAdubo(Atingido)+0.1);//aumenta a area adubada em 10%
                 }
             }
         }

@@ -266,8 +266,6 @@ Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux){
     _node* raiz = Tree->raiz;
 
     if (raiz == NULL){
-
-    printf("\nERRO: ID %d nao encontrado!!\n", aux);
     return NULL;
     }
 

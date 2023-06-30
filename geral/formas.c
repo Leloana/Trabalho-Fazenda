@@ -11,6 +11,9 @@ typedef struct Horta{
     Forma Figura;
     double Distancia;
     double Peso;
+    double PesoAtual;
+    double P_Adubo;
+    double P_Praguejado;
     char typeHort;
 }_horta;
 
@@ -18,6 +21,8 @@ Horta criaHortalica(Forma figura){
     _horta* aux = calloc(1,sizeof(_horta));
     aux->Figura = figura;
     aux->Distancia = 0.0;
+    aux->P_Adubo = 0.0;
+    aux->P_Praguejado = 0.0;
     if(get_type(figura)=='T'){
         if(strcmp(get_text_texto(figura),"@")){
             aux->typeHort = 'O';//ONION
@@ -46,11 +51,33 @@ Horta criaHortalica(Forma figura){
     }
         if(get_type(figura)=='L'){
         aux->typeHort = 'G';//GRASS
-        aux->Peso = 0.010 * sqrt(pow(get_lin_x1(figura)-get_lin_x2(figura),2)+
+        int P = 0.010 * sqrt(pow(get_lin_x1(figura)-get_lin_x2(figura),2)+
         pow(get_lin_y1(figura)-get_lin_y2(figura),2));
+        aux->Peso = P;
     }
+    aux->PesoAtual = aux->Peso;
         
     return aux;
+}
+
+double get_HortAdubo(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->P_Adubo;
+}
+
+void set_HortAdubo(Horta hortalica,double newAd){
+    _horta* aux = (_horta*)hortalica;
+    aux->P_Adubo = newAd;
+}
+
+double get_HortPraga(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->P_Praguejado;
+}
+
+void set_HortPraga(Horta hortalica,double newPrag){
+    _horta* aux = (_horta*)hortalica;
+    aux->P_Praguejado = newPrag;
 }
 
 Forma get_HortaFigura(Horta hortalica){
@@ -73,9 +100,14 @@ double get_HortaPeso(Horta hortalica){
     return aux->Peso; 
 }
 
-void set_HortaPeso(Horta hortalica,double newP){
+double get_HortaP_Atual(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->PesoAtual; 
+}
+
+void set_HortaP_Atual(Horta hortalica,double newP_Atual){
     _horta* aux = (_horta*)hortalica; 
-    aux->Peso = newP;
+    aux->PesoAtual = newP_Atual;
 }
 
 bool IsColheitadeira(Forma forma){
@@ -207,24 +239,24 @@ void killForma(void* forma){
 void reporta_figura(void* txt,void* guarda_forma){
     if(guarda_forma == NULL)return;
     if(get_type(guarda_forma) == 'T'){
-                fprintf(txt,"\nTexto ID=%d x= %lf y= %lf corp= %s corb= %s rotacao= %lf ancora= %s texto= %s",get_text_ID(guarda_forma),
+                fprintf(txt,"\nTexto ID= %d x= %g y= %g corp= %s corb= %s rotacao= %g ancora= %s texto= %s",get_text_ID(guarda_forma),
                                 get_text_x(guarda_forma),get_text_y(guarda_forma),get_text_corp(guarda_forma),
                                 get_text_corb(guarda_forma),get_text_rot(guarda_forma), get_text_ancora(guarda_forma), get_text_texto(guarda_forma));
                 }
                 
                 else if(get_type(guarda_forma) == 'R'){
-                    fprintf(txt,"\nRetangulo ID=%d x= %lf y= %lf altura= %lf largura=%lf rotacao= %lf corp= %s corb = %s",get_ret_ID(guarda_forma),
+                    fprintf(txt,"\nRetangulo ID= %d x= %g y= %g altura= %g largura= %g rotacao= %g corp= %s corb = %s",get_ret_ID(guarda_forma),
                                 get_ret_x(guarda_forma),get_ret_y(guarda_forma),get_ret_alt(guarda_forma),get_ret_larg(guarda_forma),
                                 get_ret_rot(guarda_forma), get_ret_corp(guarda_forma), get_ret_corb(guarda_forma));
                 }
 
                 else if(get_type(guarda_forma) == 'L'){
-                    fprintf(txt,"\nLinha ID=%d x1= %lf y1= %lf x2= %lf y2=%lf rotaçao= %lf corp= %s",get_lin_ID(guarda_forma),
+                    fprintf(txt,"\nLinha ID= %d x1= %g y1= %g x2= %g y2=%g rotaçao= %g corp= %s",get_lin_ID(guarda_forma),
                                 get_lin_x1(guarda_forma),get_lin_y1(guarda_forma),get_lin_x2(guarda_forma),
                                 get_lin_y2(guarda_forma),get_lin_rot(guarda_forma), get_lin_corp(guarda_forma));
                 }
                 else if(get_type(guarda_forma) == 'C'){
-                    fprintf(txt,"\nCirculo ID=%d cx= %lf cy= %lf r= %lf rotacao= %lf corp= %s corb = %s",get_circ_ID(guarda_forma),
+                    fprintf(txt,"\nCirculo ID= %d cx= %g cy= %g r= %g rotacao= %g corp= %s corb = %s",get_circ_ID(guarda_forma),
                                 get_circ_cx(guarda_forma),get_circ_cy(guarda_forma),get_circ_r(guarda_forma),
                                 get_circ_rot(guarda_forma), get_circ_corp(guarda_forma), get_circ_corb(guarda_forma));
                 }

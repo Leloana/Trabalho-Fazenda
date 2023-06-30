@@ -111,7 +111,7 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
         while(!feof(qry)){//enquanto nao acabar arquivo .qry o banco de dados é manipulado
             aux = LeituraLinha(qry, palavras,&n);
             if(strcmp(aux[0], "mv") == 0){//move figuras
-                fprintf(txt,"\n\n[*] mv %d %lf %lf", atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));//reporta o comando ao relatorio
+                fprintf(txt,"\n\n[*] mv %d %g %g", atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));//reporta o comando ao relatorio
                 LinhaMove(txt,root,atoi(aux[1]),strtod(aux[2],NULL),strtod(aux[3],NULL));
 
                 for(int i = 0;i < 4;i++)free(aux[i]);
@@ -128,7 +128,8 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
 
                 for(int i = 0;i < 2;i++)free(aux[i]);
             }
-            else if(strcmp(aux[0], "ct") == 0){//Cura hortalicas
+            else if(strcmp(aux[0], "ct") == 0){//Praga
+                fprintf(txt,"\n\n[*] ct %g %g %g %g %g ", strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
                 Plague(txt,svg,root,strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
 
                 for(int i = 0;i < 6;i++)free(aux[i]);
