@@ -152,13 +152,13 @@ bool getNodesDentroRegiaoRadialT(RadialTree t, double x1, double y1, double x2, 
         }
         for(int i=0;i<Tree->setores;i++){
         //SE O RETANGULO ESTIVER NESTE SETOR CONTINUE SE NAO VOLTA O LOOP
-        if(ChecaRetSetor(raiz->x,raiz->y,x1,y1,x2,y2,Tree->setores,i)){
+        // if(ChecaRetSetor(raiz->x,raiz->y,x1,y1,x2,y2,Tree->setores,i)){
 
             _rTree aux;
             aux.raiz = raiz->galhos[i];
             aux.setores = Tree->setores;
             getNodesDentroRegiaoRadialT(&aux,x1,y1,x2,y2,L);
-        }
+        // }
         }
     }
     if(!isEmptyLst(L))return true;
@@ -199,10 +199,10 @@ bool getInfosAtingidoPontoRadialT(RadialTree t, double x, double y, FpontoIntern
    if(raiz != NULL){
         if(f(raiz->data,x,y)  && !raiz->removido){
             insertLst(L,raiz->data);
-
+            return true;
         }
          for(int i=0;i<Tree->setores;i++){
-        //SE O RETANGULO ESTIVER NESTE SETOR CONTINUE SE NAO VOLTA O LOOP
+
         _rTree aux;
         aux.raiz = raiz->galhos[i];
         aux.setores = Tree->setores;
@@ -221,15 +221,16 @@ void visitaProfundidadeRadialT(RadialTree t, FvisitaNo f, void *aux){
     
     if(raiz!=NULL){
         
-    if(!raiz->removido)f(raiz->data,raiz->x,raiz->y,aux);
 
     for(int i=0;i<Tree->setores;i++){
-
+        if(raiz->galhos[i]!=NULL){
         _rTree Taux;
         Taux.raiz = raiz->galhos[i];
         Taux.setores = Tree->setores;
         visitaProfundidadeRadialT(&Taux,f,aux);
+        }
     }
+    if(!raiz->removido)f(raiz->data,raiz->x,raiz->y,aux);
     }
 
 }
@@ -272,11 +273,12 @@ Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux){
     else if(f(raiz->data,raiz->x,raiz->y,aux)) return raiz;
     else{
     for(int i=0;i<Tree->setores;i++){
-
+        if(raiz->galhos[i]!=NULL){
         _rTree Taux;
         Taux.raiz = raiz->galhos[i];
         Taux.setores = Tree->setores;
         return procuraNoRadialT(&Taux,f,aux);
-    }
+        }
+        }
     }
 }

@@ -1,6 +1,7 @@
 #include "aplicacoes.h"
 #include <stdio.h>
 #include "arqsvg.h"
+#include "FuncLeituras.h"
 
 void Executa_ListaFormas(Lista executada){
     Iterador apaga = createIterator(executada,false);
@@ -9,18 +10,21 @@ void Executa_ListaFormas(Lista executada){
     killLst(executada);
 }
 
-bool ajudaID(Info i,double x,double y,void* ID){
-    if(get_ID(get_HortaFigura(i)) == ID)return true;
+bool Teste_ajudaID(Info i,double x,double y){
+    if(get_ID(get_HortaFigura(i)) == (int)x)return true;
     else return false;
 }
 
-Horta achaIDNaArvore(RadialTree t, int ID){
-    Node procurado = procuraNoRadialT(t,ajudaID,(int)ID);
-    if(procurado == NULL){
-        printf("\nID %d NAO ENCONTRADO\n", ID);
-        return NULL;
-    }
-    return getInfoRadialT(procurado); 
+Horta Teste_achaIDNaArvore(RadialTree t, int ID){
+    Lista ponto = createLst(-1);
+
+    getInfosAtingidoPontoRadialT(t,ID,0,Teste_ajudaID,ponto);
+    if(getFirstLst(ponto) == NULL)return NULL;
+    
+    Horta hortalica = getLst(ponto,getFirstLst(ponto));
+    killLst(ponto);
+    return hortalica;
+    
 }
 
 int Setor(int setores, double xCentro, double yCentro, double a, double b) {
@@ -180,4 +184,28 @@ int OrdenaDistancia(const void* hort1, const void* hort2) {
     if (get_HortaD((Horta)hort1) == get_HortaD((Horta)hort2)) return 0;
     else if (get_HortaD((Horta)hort1) > get_HortaD((Horta)hort1)) return 1;
     else return -1;
+}
+
+void NaoColhido(Info i, double x, double y, void* aux){
+    atualizaPeso(i);
+    char Tipo = get_HortType(i);
+    double* Pesos = (double*)aux;
+    if(Tipo == 'S')Pesos[0] += get_HortaP_Atual(i);//Peso dos morangos ficam no primiro endereço
+    else if(Tipo == 'O')Pesos[1] += get_HortaP_Atual(i);//Peso das Cebolas no segundo assim por diante...
+    else if(Tipo == 'C')Pesos[2] += get_HortaP_Atual(i);//...
+    else if(Tipo == 'P')Pesos[3] += get_HortaP_Atual(i);//...
+    else if(Tipo == 'R' && !IsColheitadeira(get_HortaFigura(i)))Pesos[4] += get_HortaP_Atual(i);//...
+    else if(Tipo == 'G')Pesos[5] += get_HortaP_Atual(i);//Peso do mato no quinto endereço
+}
+
+void TotalColhido(void* aux, Item i){
+    atualizaPeso(i);
+    char Tipo = get_HortType(i);
+    double* Pesos = (double*)aux;
+    if(Tipo == 'S')Pesos[0] += get_HortaP_Atual(i);//Peso dos morangos ficam no primiro endereço
+    else if(Tipo == 'O')Pesos[1] += get_HortaP_Atual(i);//Peso das Cebolas no segundo assim por diante...
+    else if(Tipo == 'C')Pesos[2] += get_HortaP_Atual(i);//...
+    else if(Tipo == 'P')Pesos[3] += get_HortaP_Atual(i);//...
+    else if(Tipo == 'R' && !IsColheitadeira(get_HortaFigura(i)))Pesos[4] += get_HortaP_Atual(i);//...
+    else if(Tipo == 'G')Pesos[5] += get_HortaP_Atual(i);//Peso do mato no quinto endereço
 }

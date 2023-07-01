@@ -14,6 +14,6 @@ seguintes textos*/
 void LerGeo(FILE* geo,RadialTree geral);
 /*Le arquivo Qry e baseado em seus comandos gera modificaçoes nos objetos do banco de dados
 criado pela funcao "LerGeo"*/
-void LerQry(FILE* qry,FILE* txt,FILE* svg, RadialTree root);
+void LerQry(FILE* qry,FILE* txt,FILE* svg, RadialTree root,double* contabilidade);
 
 #endif

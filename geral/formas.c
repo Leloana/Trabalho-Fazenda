@@ -13,6 +13,7 @@ typedef struct Horta{
     double Peso;
     double PesoAtual;
     double P_Adubo;
+    double P_Cura;
     double P_Praguejado;
     char typeHort;
 }_horta;
@@ -24,17 +25,17 @@ Horta criaHortalica(Forma figura){
     aux->P_Adubo = 0.0;
     aux->P_Praguejado = 0.0;
     if(get_type(figura)=='T'){
-        if(strcmp(get_text_texto(figura),"@")){
+        if(strcmp(get_text_texto(figura),"@")==0){
             aux->typeHort = 'O';//ONION
             aux->Peso = 0.2;
         }
-        else if(strcmp(get_text_texto(figura),"*")){
+        else if(strcmp(get_text_texto(figura),"*")==0){
             aux->typeHort = 'S';//STRAWBERRY
             aux->Peso = 0.02;
         }
-        else if(strcmp(get_text_texto(figura),"%")){
+        else if(strcmp(get_text_texto(figura),"%")==0){
             aux->typeHort = 'C';//CARROT
-            aux->Peso = 0.2;
+            aux->Peso = 0.07;
         }
         else{
             aux->typeHort = 'G';//GRASS
@@ -51,13 +52,18 @@ Horta criaHortalica(Forma figura){
     }
         if(get_type(figura)=='L'){
         aux->typeHort = 'G';//GRASS
-        int P = 0.010 * sqrt(pow(get_lin_x1(figura)-get_lin_x2(figura),2)+
+        double P = 0.010 * sqrt(pow(get_lin_x1(figura)-get_lin_x2(figura),2)+
         pow(get_lin_y1(figura)-get_lin_y2(figura),2));
         aux->Peso = P;
     }
     aux->PesoAtual = aux->Peso;
         
     return aux;
+}
+
+char get_HortType(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->typeHort;
 }
 
 double get_HortAdubo(Horta hortalica){
@@ -68,6 +74,16 @@ double get_HortAdubo(Horta hortalica){
 void set_HortAdubo(Horta hortalica,double newAd){
     _horta* aux = (_horta*)hortalica;
     aux->P_Adubo = newAd;
+}
+
+double get_HortCura(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->P_Cura;
+}
+
+void set_HortCura(Horta hortalica,double newCure){
+    _horta* aux = (_horta*)hortalica;
+    aux->P_Cura = newCure;
 }
 
 double get_HortPraga(Horta hortalica){
@@ -112,8 +128,7 @@ void set_HortaP_Atual(Horta hortalica,double newP_Atual){
 
 bool IsColheitadeira(Forma forma){
     if(get_type(forma)!= 'R')return false;
-    else if(get_Colheita(forma))return true;
-    else return false;
+    else return get_Colheita(forma);
 }
 
 char get_type(void* point){

@@ -47,6 +47,17 @@ double get_HortAdubo(Horta hortalica);
 
 void set_HortAdubo(Horta hortalica,double newPrag);
 
+double get_HortCura(Horta hortalica);
+
+void set_HortCura(Horta hortalica,double newCure);
+/*S = MORANGO(strawberrie)
+O = CEBOLA(onion)
+C = CENOURA(carrot)
+P = ABOBORA (pumpkim)
+R = REPOlLHO(repolho)
+G = MATO(grass)*/
+char get_HortType(Horta hortalica);
+
 //retorna o geo da hortalica
 Forma get_HortaFigura(Horta hortalica);
 //seta a distancia da hortalica em relaçao ao centro relativo da arvore
@@ -60,7 +71,7 @@ double get_HortaP_Atual(Horta hortalica);
 
 void set_HortaP_Atual(Horta hortalica,double newP_Atual);
 
-//retorna true caso a forma analisa seja uma colheitadeira, false caso contrario
+//retorna true caso a forma analisada seja uma colheitadeira, false caso contrario
 bool IsColheitadeira(Forma forma);
 
 #endif

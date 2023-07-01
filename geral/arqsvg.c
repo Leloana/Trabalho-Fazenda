@@ -4,7 +4,8 @@
 
 ArqSvg abreEscritaSvg(char *fn){
     FILE* arquivo = fopen(fn,"w");
-    fprintf(arquivo,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg viewBox=\"-110 -110 600 500\" xmlns=\"http://www.w3.org/2000/svg\">");
+    // <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg viewBox=\"-110 -110 600 500\" xmlns=\"http://www.w3.org/2000/svg\">
+    fprintf(arquivo,"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%%\" height=\"100%%\" viewBox=\"0 0 6000 6000\">");
     return arquivo;
 }
 

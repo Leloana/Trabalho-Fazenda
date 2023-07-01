@@ -93,17 +93,18 @@ void LerGeo(FILE* geo,RadialTree geral){
 
                 for(int i = 0 ; i < 8;i++)free(aux[i]);
             }
-		else {
-            printf("\nERRO NA ENTRADA DO GEO [*]%s -> COMANDO INVALIDO\n", aux[0]);  
-            free(aux[0]);
-        }
+            else {
+                printf("\nERRO NA ENTRADA DO GEO [*]%s -> COMANDO INVALIDO\n", aux[0]);
+            } 
         }
     }
 }
 
-void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
+void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root,double* contabilidade){
     char* palavras[100];
     int n;
+    Lista Colhido = createLst(-1);
+    Lista Colheitadeiras = createLst(-1);
     if(qry == NULL)printf(" ERRO AO ABRIR ARQUIVO QRY\n");
     else{
 
@@ -117,14 +118,14 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
                 for(int i = 0;i < 4;i++)free(aux[i]);
             }
             else if(strcmp(aux[0], "hvt") == 0){//Colhe
-                fprintf(txt,"\n\n[*] hvt %d %s", atoi(aux[1]),aux[2]);//reporta o comando ao relatorio
-                Harvest(txt,svg,root,atoi(aux[1]),atoi(aux[2]),aux[3]);
+                fprintf(txt,"\n\n[*] hvt %d %d %s", atoi(aux[1]), atoi(aux[2]),aux[3]);//reporta o comando ao relatorio
+                *contabilidade += Harvest(txt,svg,root,Colhido,atoi(aux[1]),atoi(aux[2]),aux[3]);
 
                 for(int i = 0;i < 3;i++)free(aux[i]);
             }
             else if(strcmp(aux[0], "cl") == 0){//Seta colheiradeiras
                 fprintf(txt,"\n\n[*] cl %d ", atoi(aux[1]));
-                setColheitadeira(root,atoi(aux[1]));
+                setColheitadeira(root,atoi(aux[1]),Colheitadeiras);
 
                 for(int i = 0;i < 2;i++)free(aux[i]);
             }
@@ -135,15 +136,20 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
                 for(int i = 0;i < 6;i++)free(aux[i]);
             }
             else if(strcmp(aux[0], "cr") == 0){//Cura hortalicas
-            
+                 fprintf(txt,"\n\n[*] cr %g %g %g %g %g ", strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
+                 Cure(txt,svg,root,strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
 
                 for(int i = 0;i < 5;i++)free(aux[i]);
             }
             else if(strcmp(aux[0], "ad") == 0){//aduba hortalicas
-
+                fprintf(txt,"\n\n[*] ad %g %g %g %g %g ", strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
+                fertilizing(txt,svg,root,strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
                 for(int i = 0;i < 5;i++)free(aux[i]);
             }
             else if(strcmp(aux[0], "st") == 0){//dispersa sementes
+                fprintf(txt,"\n\n[*] ad %g %g %g %g %g ", strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
+                seeding(txt,svg,root,strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),
+                strtod(aux[5],NULL),strtod(aux[6],NULL),strtod(aux[7],NULL),atoi(aux[6]));
 
                 for(int i = 0;i < 8;i++)free(aux[i]);
             }
@@ -155,16 +161,26 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root){
             }
             else if(strcmp(aux[0], "c?") == 0){//reporta TODAS colheitadeiras
                 fprintf(txt,"\n\n[*] c?");
-                ReportaColheitadeiras(txt,root);
+                fprintf(txt,"\nExistem %d Colheitadeiras:\n", lengthLst(Colheitadeiras));
+                ReportaColheitadeiras(txt,Colheitadeiras);
 
                 free(aux[0]);
             }
             else {
-
-            
                 printf("\nERRO NA ENTRADA DO QRY [*]%s -> COMANDO INVALIDO\n", aux[0]);
-                free(aux[0]); 
             } 
         }
+        if(!isEmptyLst(Colhido)){
+            double ContabilidadeColhidos[6] = {0,0,0,0,0,0};
+            fold(Colhido,TotalColhido,ContabilidadeColhidos);
+            fprintf(txt,"\n\nPanorama final da safra 2023 1 semestre:\n");
+            fprintf(txt,"Morangos = %g kg\n",ContabilidadeColhidos[0]);
+            fprintf(txt,"Cebolas = %g kg\n",ContabilidadeColhidos[1]);
+            fprintf(txt,"Cenouras = %g kg\n",ContabilidadeColhidos[2]);
+            fprintf(txt,"Aboboras = %g kg\n",ContabilidadeColhidos[3]);
+            fprintf(txt,"Repolhos = %g kg\n",ContabilidadeColhidos[4]);
+            fprintf(txt,"\nTerreno limpo:\nMatos = %g kg\n",ContabilidadeColhidos[5]);
+        }
+        else fprintf(txt,"\n\nNao houve Colheitas.\n");
     }
 }

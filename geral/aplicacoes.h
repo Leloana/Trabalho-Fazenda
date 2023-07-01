@@ -10,10 +10,12 @@
 
 /*Retorna a hortalica indicada por ID ao usar a funcao procuraNoRadialT de "radialtree.h" e a funcao
 "ajudaID"*/
-Horta achaIDNaArvore(RadialTree t, int ID);
+Horta Teste_achaIDNaArvore(RadialTree t, int ID);
+
 /*Funcao auxiliar a "achaIDNaArvore, utilizada na funcao procuraNoRadialT de "radialtree.h", esta funcao
 retorna verdadeiro caso o ID da informaçao "i" seja igual ao ID referenciado por "ID"*/
-bool ajudaID(Info i,double x,double y,void* ID);
+bool Teste_ajudaID(Info i,double x,double y);
+
 /*Retorna o setor atual com centro em "xCentro,yCentro" do ponto em "a,b"*/
 int Setor(int setores, double xCentro, double yCentro, double a, double b);
 /*Retorna verdadeiro caso o ponto dado por "X,Y" esteja dentro do retangulo que tem sua diagonal 
@@ -25,6 +27,9 @@ bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,
 /*Free personalizado para listas com figuras geo*/
 void Executa_ListaFormas(Lista executada);
 
+void NaoColhido(Info i, double x, double y, void* aux);
+
+void TotalColhido(void* aux, Item i);
 
 /*=====Funcoes para reorganizar arvore caso o fator degradaçao atual da arvore supere o valor maximo aceito=====*/
 /*Atualiza a distancia da hortalica em relaçao ao centro da arvore que é dado pelo void* Centro*/

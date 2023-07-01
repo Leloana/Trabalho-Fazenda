@@ -7,33 +7,47 @@
 #include "arqsvg.h"
 #include "Leituras.h"
 
-bool checkF(Item i,double x1,double y1,double x2,double y2){
-    return true;
-}
-
-
 int main(void){
     printf("\nIniciando Dados...\n");
-    RadialTree Arvore = newRadialTree(4,0.4);
+    RadialTree Arvore = newRadialTree(4 ,0.4);
     Lista Region = createLst(-1);
     ArqSvg svg = abreEscritaSvg("DADOS.svg");
-    // ArqSvg REMO = abreEscritaSvg("REMOVIDO.svg");
+    double ContabilidadeColheita;
+    double ContabilidadeNaoColhidos[6] = {0,0,0,0,0,0};
     FILE* geo = fopen("TESTE.geo","r");
     FILE* qry = fopen("ARQ.qry","r");
     FILE* txt = fopen("RELATORIO.txt","w");
     printf("\nConcluido!!\n\n");
 
+    printf("Lendo GEO...\n");
     LerGeo(geo,Arvore);
-    LerQry(qry,txt,svg,Arvore);
+    printf("\nConcluido!!\n\n");
 
-    printf("Escrevendo...\n");
+    printf("Lendo QRY...\n");
+    LerQry(qry,txt,svg,Arvore,&ContabilidadeColheita);
+    printf("\nConcluido!!\n\n");
+
+    printf("Escrevendo SVG...\n");
     visitaProfundidadeRadialT(Arvore,escreveGeralSvgArvore,svg);
     printf("\nConcluido!!\n\n");
 
+    printf("Finalizando TXT...\n");
+    visitaProfundidadeRadialT(Arvore,NaoColhido,ContabilidadeNaoColhidos); 
+    fprintf(txt,"\nRestante a ser colhido no proximo semestre:\n");
+    fprintf(txt,"Morangos = %g kg\n",ContabilidadeNaoColhidos[0]);
+    fprintf(txt,"Cebolas = %g kg\n",ContabilidadeNaoColhidos[1]);
+    fprintf(txt,"Cenouras = %g kg\n",ContabilidadeNaoColhidos[2]);
+    fprintf(txt,"Aboboras = %g kg\n",ContabilidadeNaoColhidos[3]);
+    fprintf(txt,"Repolhos = %g kg\n",ContabilidadeNaoColhidos[4]);
+    fprintf(txt,"\nTerreno a ser limpo:\nMatos = %g kg\n",ContabilidadeNaoColhidos[5]);
+    printf("\nConcluido!!\n\n");
+
+    printf("Fechando arquivos...\n");
     fechaSvg(svg);
-    // fechaSvg(REMO);
     fclose(geo);
     fclose(qry);
     fclose(txt);
+    killLst(Region);
+    printf("\nConcluido!!\n\n");
     return 0;
 }

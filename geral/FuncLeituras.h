@@ -9,14 +9,16 @@ typedef void* Colheitadeira;
 para mover o nó atual que contem a informaçao que deseja ser movida é REMOVIDO e RECRIADO em sua nova posição
 assim a arvore é refeita apenas se o fator de degradaçao atual da arvore passe seu valor maximo*/
 void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y);
+
+typedef void* CountHort;
 /*A colheitadeira identificada por "ID" avança sua largura caso vá para o leste ou oeste e avança
 sua altura caso vá para o norte ou sul, andando na direçao determinada por "cardial" a quantidade determinada
 por "passos", a funçao seleciona os nós de toda a area percorrida usando a funcao getNodesRegiaoRadialT
 e os remove, reportando seus atributos e fazendo a contagem final da colheita*/
-void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* cardial);
+double Harvest(FILE* txt,FILE* svg, RadialTree root,Lista Colhidos,int ID, int passos, char* cardial);
 /*Analise de colheita é a funcao que faz o movimento da Colheitadeira usando a funcao LinhaMove e "colhe as figuras"*/
-void AnaliseDeColheita(FILE* txt,RadialTree root,double x1, double y1,
- double x2, double y2, Lista Hortas_Colhidas, Lista Nos_Colhidos);
+double AnaliseDeColheita(FILE* txt,RadialTree root,double x1, double y1,
+ double x2, double y2,Lista Nos_Colhidos,Lista ColhidosTotal);
 /*Na funçao plague circulos sao posicionados preenchendo um retangulo dado por "X,Y,height e weight", os circulos possuem
 raio = "ratio" e sao os circulos que definem a porcentagem em que uma horta foi atingida, a funçao funciona usando
 getNodesRegiaoRadialT que é dado pelo retangulo dos parametros, logo em seguida a contabilidade dos acertos é feita
@@ -30,20 +32,22 @@ bool checaDentro75(void* Atingido,void* Atual,double* acerto);
 /*Acontece semelhante a "Plague", porem o valor repassado pela funcao "checaDentro75" é somado ao peso atual da hortaliça*/
 void Cure(FILE* txt,FILE* svg, RadialTree root,double X,double Y,
 double weight,double height,double ratio);
+
+void seeding(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double factor,
+double weight,double height,double Dx, double Dy, int j);
 /*Reporta os dados da figura de identificado "ID", ela utiliza a funcao "procuraNoRadialT" passando o ID
 desejado como parametro do void* */
 void reportaDados(FILE* txt,RadialTree root,int ID);
 /*Usa a mesma funcao que a "reportaDados" para achar o ID, quando acha-o indica que o retangulo do ID é uma Colheitadeira
 ao usar a funcao "set_Colheita" como true*/
-void setColheitadeira(RadialTree root,int ID);
+void setColheitadeira(RadialTree root,int ID,Lista _Colheitadeiras);
 /*usa a funcao de visita em profundidade de "radialtree.h" passando a funcao "RepColhe" como parametro*/
-void ReportaColheitadeiras(FILE* txt,RadialTree root);
-/*Funcao auxiliar a "ReportaColheitadeiras", ao identificar o objeto analisado como uma colheitadeira, reporta-o*/
-void RepColhe(Info i,double x,double y,void* aux);
+void ReportaColheitadeiras(FILE* txt,Lista _Colheitadeiras);
 
 void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio);
 
-bool checaDentroAdubo(Horta atingida, Forma adubo);
+bool checaDentroAdubo(void* atingida, void* adubo);
 
+void atualizaPeso(void* hortalica);
 
 #endif

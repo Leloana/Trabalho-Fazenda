@@ -3,14 +3,22 @@
 #include <stdlib.h>
 #include "arqsvg.h"
 #include "aplicacoes.h"
-#include "Retangulo.h"
 #include <math.h>
 
+typedef struct Cont{
+    double morango;
+    double cebola;
+    double cenoura;
+    double abobora;
+    double mato;
+    double repolho;
+}_contHort;
+
 void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
-    Horta _hortalica = achaIDNaArvore(root,ID);
+    Horta _hortalica = Teste_achaIDNaArvore(root,ID);
     Forma imagem = get_HortaFigura(_hortalica);
 
-    if(imagem != NULL){
+    if(_hortalica != NULL){
     removeNoRadialT(root,getNodeRadialT(root,get_x(imagem),get_y(imagem),0.0000001));
     
     reporta_figura(txt,imagem);
@@ -25,22 +33,20 @@ void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
     else printf("\nERRO NA ENTRADA DA FUNCAO [*]mv -> ID %d NAO EXISTE\n",ID);
 }
 
-void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* cardial){
+double Harvest(FILE* txt,FILE* svg, RadialTree root,Lista Colhidos,int ID, int passos, char* cardial){
     Lista Nos_Colhidos = createLst(-1);
-    Horta _Colhehorta = achaIDNaArvore(root,ID);
+    Horta _Colhehorta = Teste_achaIDNaArvore(root,ID);
     Retangulo Colheitadeira = get_HortaFigura(_Colhehorta);
     Retangulo Borda;
-    Lista Hortas_Colhidas = createLst(-1);
-
-    if(Colheitadeira != NULL){
-    set_Colheita(Colheitadeira, true);//Ativa a flag que sinaliza que um retangulo é colheitadeira
+    double Contabilidade = 0.0;
+    if(Colheitadeira != NULL && IsColheitadeira(Colheitadeira)){
     double Xo = get_x(Colheitadeira);//X inicial e Y inicial
     double Yo = get_y(Colheitadeira);
 
     if(strcmp(cardial,"n")==0){//Caso a colheiradeira vá para o norte
         LinhaMove(txt,root,ID,0.0,-passos*get_ret_alt(Colheitadeira));
-        AnaliseDeColheita(txt,root,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),
-        Xo+get_ret_larg(Colheitadeira),Yo+get_ret_alt(Colheitadeira),Hortas_Colhidas,Nos_Colhidos);
+        Contabilidade += AnaliseDeColheita(txt,root,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),
+        Xo+get_ret_larg(Colheitadeira),Yo+get_ret_alt(Colheitadeira),Nos_Colhidos,Colhidos);
         
         Borda = criaRect(-1,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),get_ret_larg(Colheitadeira),(1+passos)*get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
@@ -50,8 +56,8 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
 
     else if(strcmp(cardial,"s")==0){
         LinhaMove(txt,root,ID,0.0,(passos)*get_ret_alt(Colheitadeira));
-        AnaliseDeColheita(txt,root,Xo,Yo,get_ret_x(Colheitadeira)+get_ret_larg(Colheitadeira),
-        get_ret_y(Colheitadeira)+get_ret_alt(Colheitadeira),Hortas_Colhidas,Nos_Colhidos);
+        Contabilidade += AnaliseDeColheita(txt,root,Xo,Yo,get_ret_x(Colheitadeira)+get_ret_larg(Colheitadeira),
+        get_ret_y(Colheitadeira)+get_ret_alt(Colheitadeira),Nos_Colhidos,Colhidos);
         
         Borda = criaRect(-1,Xo,Yo,get_ret_larg(Colheitadeira),(1+passos)*get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
@@ -60,8 +66,8 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
     }
     else if(strcmp(cardial,"l")==0){ 
         LinhaMove(txt,root,ID,passos*get_ret_larg(Colheitadeira),0.0);
-        AnaliseDeColheita(txt,root,Xo,Yo,get_ret_x(Colheitadeira)+get_ret_larg(Colheitadeira),
-        get_ret_y(Colheitadeira)+get_ret_alt(Colheitadeira),Hortas_Colhidas,Nos_Colhidos);
+        Contabilidade += AnaliseDeColheita(txt,root,Xo,Yo,get_ret_x(Colheitadeira)+get_ret_larg(Colheitadeira),
+        get_ret_y(Colheitadeira)+get_ret_alt(Colheitadeira),Nos_Colhidos,Colhidos);
 
         Borda = criaRect(-1,Xo,Yo,(1+passos)*get_ret_larg(Colheitadeira),get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
@@ -71,8 +77,8 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
 
     else if(strcmp(cardial,"o")==0){
         LinhaMove(txt,root,ID,-passos*get_ret_larg(Colheitadeira),0.0);
-        AnaliseDeColheita(txt,root,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),
-        Xo+get_ret_larg(Colheitadeira),Yo+get_ret_alt(Colheitadeira),Hortas_Colhidas,Nos_Colhidos);
+        Contabilidade += AnaliseDeColheita(txt,root,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),
+        Xo+get_ret_larg(Colheitadeira),Yo+get_ret_alt(Colheitadeira),Nos_Colhidos,Colhidos);
 
         Borda = criaRect(-1,get_ret_x(Colheitadeira),get_ret_y(Colheitadeira),(1+passos)*get_ret_larg(Colheitadeira),get_ret_alt(Colheitadeira), "red", "none");
         set_ret_dasharray(Borda,5);
@@ -81,29 +87,38 @@ void Harvest(FILE* txt,FILE* svg, RadialTree root,int ID, int passos, char* card
     }
     else{
         printf("\nERRO NA ENTRADA DA FUNCAO [*]hrv -> %s E UM COMANDO INVALIDO\n",cardial);
-        return;
+        return 0.0;
     }
     }
     else printf("\nERRO NA ENTRADA DA FUNCAO [*]hrv -> ID %d NAO EXISTE\n",ID);
+    fprintf(txt,"\n%d itens foram colhidos!",lengthLst(Nos_Colhidos)-1);
+    fprintf(txt,"\nTotal da colheita = %g kg",Contabilidade);
     killLst(Nos_Colhidos);
-    killLst(Hortas_Colhidas);
+    return Contabilidade;
 }
 
-void AnaliseDeColheita(FILE* txt,RadialTree root,double x1, double y1,
- double x2, double y2, Lista Hortas_Colhidas, Lista Nos_Colhidos){
+double AnaliseDeColheita(FILE* txt,RadialTree root,double x1, double y1,
+ double x2, double y2,Lista Nos_Colhidos,Lista ColhidosTotal){
+    double contabilidade = 0.0;
     if(getNodesDentroRegiaoRadialT(root,x1,y1,x2,y2,Nos_Colhidos)){
          //Pega Nodes para remove-los
-        Hortas_Colhidas = map(Nos_Colhidos,getInfoRadialT);//lista que tem hortaliças
-        fold(map(Hortas_Colhidas,getInfoRadialT),reporta_figura,txt);//reporto a lista modificada que so tem geos
         Iterador K = createIterator(Nos_Colhidos,false);
         while(!isIteratorEmpty(Nos_Colhidos,K)){
             Node removido = getIteratorNext(Nos_Colhidos,K);
-            Forma checkFarm = get_HortaFigura(getInfoRadialT(removido));
-            if(!IsColheitadeira(checkFarm))removeNoRadialT(root,removido);
+            Horta hortalica = getInfoRadialT(removido);
+            Forma checkFarm = get_HortaFigura(hortalica);
+            if(!IsColheitadeira(checkFarm)){
+                atualizaPeso(hortalica);
+                insertLst(ColhidosTotal,hortalica);
+                contabilidade += get_HortaP_Atual(hortalica);
+                reporta_figura(txt,checkFarm);//reporta no txt
+                removeNoRadialT(root,removido);//remove nó
+            }
         }
         killIterator(Nos_Colhidos,K);
     }
     else fprintf(txt,"\nNada foi colhido");
+    return contabilidade;
 }
 
 void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio){
@@ -133,7 +148,6 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
 
             Node No_atual = getIteratorNext(Atingidos,W);//Lista de nodes
             Horta Atingido = getInfoRadialT(No_atual);//Info do node = HORTA
-            reporta_figura(txt,get_HortaFigura(Atingido));//info da Horta = FIGURA
             Iterador K = createIterator(Pragas,false);
             double Porcentagem = 0.0;
             while(!isIteratorEmpty(Pragas,K)){
@@ -146,11 +160,15 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
                     escreveTextoSvg(svg,morte);
                     removeNoRadialT(root,No_atual);
                     killTexto(morte); 
+                    fprintf(txt,"\nA planta ID = %d morreu de pragas",get_ID(get_HortaFigura(Atingido)));
                     break;
                 }
                 }
             }
-            fprintf(txt,"\n%g Porcento atingida\n", Porcentagem);
+            if(Porcentagem != 0.0){
+                reporta_figura(txt,get_HortaFigura(Atingido));//info da Horta = FIGURA
+                fprintf(txt,"\n%g Porcento atingida", Porcentagem);
+            }
         }
     }
     else printf("\nA praga nao atingiu plantas\n");
@@ -211,8 +229,6 @@ bool checaDentro75(void* Atingido,void* Praga_Atual,double* acerto){
         else return false; 
     }
     else if(get_type(Figura)=='L'){//mato
-        double tamanhoLin = sqrt(pow(get_lin_x1(Figura)-get_lin_x2(Figura),2)+
-        pow(get_lin_y1(Figura)-get_lin_y2(Figura),2));
         double DistCentro1 = sqrt(pow(get_lin_x1(Figura)-PragaX,2)+
         pow(get_lin_y1(Figura)-PragaY,2));
         double DistCentro2 = sqrt(pow(get_lin_x2(Figura)-PragaX,2)+
@@ -223,6 +239,10 @@ bool checaDentro75(void* Atingido,void* Praga_Atual,double* acerto){
             return true;
         }
         else return false; 
+    }
+    else{
+        printf("\nFIGURA DESCONHECIDA");
+        return false;
     }
 }
 
@@ -253,8 +273,8 @@ void Cure(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,d
                 Circulo inseticida_atual = getIteratorNext(Curas,K);
                 checaDentro75(Atingido,inseticida_atual,&Porcentagem);
             }
-            if(get_HortPraga(Atingido) > 0.0)set_HortPraga(Atingido,get_HortPraga(Atingido)-Porcentagem);
-            fprintf(txt,"\n%g Porcento atingida\n", Porcentagem);
+            set_HortCura(Atingido,get_HortCura(Atingido)+Porcentagem);
+            fprintf(txt,"\n%g Porcento atingida", Porcentagem);
         }
     }
     else printf("\nO inseticida nao atingiu plantas\n");
@@ -293,6 +313,7 @@ void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double w
                 Circulo adubo_atual = getIteratorNext(Adubos,K);
                 if(checaDentroAdubo(Atingido,adubo_atual)){
                     set_HortAdubo(Atingido,get_HortAdubo(Atingido)+0.1);//aumenta a area adubada em 10%
+                    reporta_figura(txt,get_HortaFigura(Atingido));
                 }
             }
         }
@@ -307,7 +328,7 @@ void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double w
     Executa_ListaFormas(Adubos);
 }
 
-bool checaDentroAdubo(Horta atingida, Forma adubo){
+bool checaDentroAdubo(void* atingida, void* adubo){
     Forma Figura = get_HortaFigura(atingida);
 
     if(get_type(Figura)=='C'){//ABOBORA
@@ -329,42 +350,48 @@ bool checaDentroAdubo(Horta atingida, Forma adubo){
     }
 }
 
-// void seeding(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double Dx, double Dy, int j){
-//     Lista decoracoes = createLst(-1);
-//     Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
-//     set_ret_dasharray(Borda,5.0);
-//     Circulo Ponto = criaCirc(-1,X,Y,1,"red","red");
-//     Retangulo Paralelo = criaRect(-1,X+Dx,Y+Dy,weight,height,"red","none");
-//     insertLst(decoracoes,Borda);
-//     Lista Atingidos = createLst(-1);
-//     if(getNodesDentroRegiaoRadialT(root,X,Y,X+weight,Y+height,Atingidos)){
+void seeding(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double factor,double Dx, double Dy, int j){
+    Lista Atingidos = createLst(-1);
+    if(getNodesDentroRegiaoRadialT(root,X,Y,X+weight,Y+height,Atingidos)){
+    
+    }
 
-//     }
-
-//     fold(decoracoes,escreveGeralSvgLista,svg);
-//     Executa_ListaFormas(decoracoes);
-// }
+    Retangulo Borda = criaRect(-1,X,Y,weight,height,"red","none");
+    set_ret_dasharray(Borda,4.0);
+    Circulo Ponto = criaCirc(-1,X,Y,1,"red","red");
+    Retangulo Paralelo = criaRect(-1,X+Dx,Y+Dy,weight,height,"red","none");
+    escreveRetanguloSvg(svg,Borda);
+    escreveRetanguloSvg(svg,Paralelo);
+    escreveCirculoSvg(svg,Ponto);
+    killRet(Borda);
+    killRet(Paralelo);
+    killCirc(Ponto);
+}
 
 void reportaDados(FILE* txt,RadialTree root,int ID){
-    Horta busca = achaIDNaArvore(root,ID);
+    Horta busca = Teste_achaIDNaArvore(root,ID);
+    if(busca == NULL)return;
     Forma Reportada = get_HortaFigura(busca);
 
     reporta_figura(txt,Reportada);
 }
 
-void ReportaColheitadeiras(FILE* txt,RadialTree root){
-    visitaProfundidadeRadialT(root,RepColhe,txt);
+void ReportaColheitadeiras(FILE* txt,Lista _Colheitadeiras){
+    fold(map(_Colheitadeiras,get_HortaFigura),reporta_figura,txt);
 }
 
-void RepColhe(Info i,double x,double y,void* aux){
-    Forma Colheitadeira = get_HortaFigura(i);
-    if(IsColheitadeira(Colheitadeira)){
-        reporta_figura(aux,Colheitadeira);
-    }
-}
-
-void setColheitadeira(RadialTree root,int ID){
-    Horta Ret = achaIDNaArvore(root,ID);
+void setColheitadeira(RadialTree root,int ID,Lista _Colheitadeiras){
+    Horta Ret = Teste_achaIDNaArvore(root,ID);
     Retangulo Colheitadeira = get_HortaFigura(Ret);
     set_Colheita(Colheitadeira,true);
+    insertLst(_Colheitadeiras,Ret);
+}
+
+void atualizaPeso(void* hortalica){
+    int adubo = (int)floor(get_HortAdubo(hortalica));
+    double degradado = get_HortPraga(hortalica) - get_HortCura(hortalica);
+    if(degradado < 0)degradado = 0;//caso tenha curado ela mais que o necessario(degradado<0) nao estara degradada
+    double pAtual = get_HortaPeso(hortalica) + get_HortaPeso(hortalica)* 0.1*adubo - get_HortaPeso(hortalica)* degradado;//peso original + 10%do Po a cada 100% adubado - (%praga-%cura)
+
+    set_HortaP_Atual(hortalica, pAtual);
 }
