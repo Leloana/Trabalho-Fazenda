@@ -149,7 +149,7 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root,double* contabilidade)
             else if(strcmp(aux[0], "st") == 0){//dispersa sementes
                 fprintf(txt,"\n\n[*] ad %g %g %g %g %g ", strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),strtod(aux[5],NULL));
                 seeding(txt,svg,root,strtod(aux[1],NULL),strtod(aux[2],NULL),strtod(aux[3],NULL),strtod(aux[4],NULL),
-                strtod(aux[5],NULL),strtod(aux[6],NULL),strtod(aux[7],NULL),atoi(aux[6]));
+                strtod(aux[5],NULL),strtod(aux[6],NULL),strtod(aux[7],NULL),atoi(aux[8]));
 
                 for(int i = 0;i < 8;i++)free(aux[i]);
             }

@@ -199,7 +199,6 @@ void NaoColhido(Info i, double x, double y, void* aux){
 }
 
 void TotalColhido(void* aux, Item i){
-    atualizaPeso(i);
     char Tipo = get_HortType(i);
     double* Pesos = (double*)aux;
     if(Tipo == 'S')Pesos[0] += get_HortaP_Atual(i);//Peso dos morangos ficam no primiro endereço

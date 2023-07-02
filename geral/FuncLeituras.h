@@ -10,7 +10,6 @@ para mover o nó atual que contem a informaçao que deseja ser movida é REMOVID
 assim a arvore é refeita apenas se o fator de degradaçao atual da arvore passe seu valor maximo*/
 void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y);
 
-typedef void* CountHort;
 /*A colheitadeira identificada por "ID" avança sua largura caso vá para o leste ou oeste e avança
 sua altura caso vá para o norte ou sul, andando na direçao determinada por "cardial" a quantidade determinada
 por "passos", a funçao seleciona os nós de toda a area percorrida usando a funcao getNodesRegiaoRadialT
@@ -35,6 +34,9 @@ double weight,double height,double ratio);
 
 void seeding(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double factor,
 double weight,double height,double Dx, double Dy, int j);
+
+void sementesGeradas(FILE*txt,RadialTree root,Lista atingidos,int quantidade[7],
+double factor, double x1,double y1,double x2,double y2,int j);
 /*Reporta os dados da figura de identificado "ID", ela utiliza a funcao "procuraNoRadialT" passando o ID
 desejado como parametro do void* */
 void reportaDados(FILE* txt,RadialTree root,int ID);
