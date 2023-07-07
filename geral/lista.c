@@ -185,6 +185,7 @@ void removeLst(Lista L, Posic p){
 void killLst(Lista L){
     _list* aux = (_list*) L;
     while(aux->head != NIL) popLst(aux);
+    free(aux);
 }
 
 int lengthLst(Lista L){
@@ -282,14 +283,14 @@ Lista map(Lista L,Apply f){
     return (Lista)B;
 }
 
-Lista filter(Lista L, Check f) {
+Lista filter(Lista L, Check f,double x1, double y1, double x2,double y2) {
     _list* aux = (_list*)L;
     _list* B = createLst(maxLengthLst(aux));
     Iterador K = createIterator(aux, false);
 
     while (!(isIteratorEmpty(aux, K))) {
         Item info = getIteratorNext(aux, K);
-        if (f(info)) {
+        if (f(info,x1,y1,x2,y2)) {
             insertLst(B, info);
         }
     }

@@ -10,6 +10,13 @@ void Executa_ListaFormas(Lista executada){
     killLst(executada);
 }
 
+void Executa_ListaHortas(Lista executada){
+    Iterador apaga = createIterator(executada,false);
+    while(!isIteratorEmpty(executada,apaga))killHorta(getIteratorNext(executada,apaga));
+    killIterator(executada,apaga);
+    killLst(executada);
+}
+
 bool Teste_ajudaID(Info i,double x,double y){
     if(get_ID(get_HortaFigura(i)) == (int)x)return true;
     else return false;
@@ -24,7 +31,6 @@ Horta Teste_achaIDNaArvore(RadialTree t, int ID){
     Horta hortalica = getLst(ponto,getFirstLst(ponto));
     killLst(ponto);
     return hortalica;
-    
 }
 
 int Setor(int setores, double xCentro, double yCentro, double a, double b) {
@@ -57,7 +63,7 @@ int Setor(int setores, double xCentro, double yCentro, double a, double b) {
 }
 
 bool DentroRegiaoRet(double X,double Y,double x1, double y1, double x2, double y2){
-    if(X > x2 || X < x1 || Y < y1 || Y > y2)return false;
+    if(X >= x2 || X <= x1 || Y <= y1 || Y >= y2)return false;
     else return true;
 }
 
@@ -68,6 +74,8 @@ bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,
     double y4 = y2;
     int vetSetores[4];
 
+    if(DentroRegiaoRet(xCentro,yCentro,x1,y1,x2,y2))return true;
+
     vetSetores[0] = Setor(setores,xCentro,yCentro,x3,y3);
     vetSetores[1] = Setor(setores,xCentro,yCentro,x1,y1);
     vetSetores[2] = Setor(setores,xCentro,yCentro,x4,y4);
@@ -77,68 +85,52 @@ bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,
             return true;
         }
     }
-    if(xCentro == x1 && yCentro <= y2 && yCentro >= y1)return true;//Caso esteja na aresta esquerda
-    if(xCentro == x2 && yCentro <= y2 && yCentro >= y1)return true;//Caso esteja na aresta Direita
-    if(xCentro == y1 && yCentro <= x2 && yCentro >= x1)return true;//Caso esteja na aresta superior
-    if(xCentro == y2 && yCentro <= x2 && yCentro >= x1)return true;//Caso esteja na aresta inferior
-    //EM RELACAO AO Y
-    //arestas laterais
-    //Direita continua decrescente(deve ser menor que o X do centro)
-    if((x2 > xCentro) && (setorAtual < vetSetores[0] && setorAtual > vetSetores[3])){
-            return true;
+
+    //NORTE
+    if(y2 >= yCentro){
+        //EXTREMO NORTE
+        if(x1 <= xCentro && x2 >= xCentro){
+            if(setorAtual > vetSetores[3] && setorAtual < vetSetores[2])return true;
         }
-    //Crescente
-    if((x2 < xCentro) && (setorAtual > vetSetores[0] && setorAtual < vetSetores[3])){
-            return true;
+        //NORDESTE
+        if(x2 < xCentro){
+            if(setorAtual > vetSetores[3] && setorAtual < vetSetores[1])return true;
         }
-    //Direita para tras
-    if((x2 > xCentro && y3 > yCentro) && (setorAtual < vetSetores[0] || setorAtual > vetSetores[3])){
-            return true;
-        }
-    //Esquerda continua decrescente(deve ser menor que o X do centro)
-    if((x1 > xCentro) && (setorAtual < vetSetores[1] && setorAtual > vetSetores[2])){
-            return true;
-        }
-    //crescente
-    if((x1 < xCentro) && (setorAtual > vetSetores[1] && setorAtual < vetSetores[2])){
-            return true;
-        }
-    //Esquerda para tras
-    if((x1 > xCentro && y1 > yCentro) && (setorAtual < vetSetores[1] || setorAtual > vetSetores[2])){
-            return true;
-        }
-    //EM RELACAO AO X
-    //aresta superior acima do centro
-    if( y3 > yCentro ){
-        if(setorAtual > vetSetores[0] && setorAtual < vetSetores[1]){
-            return true;
+        //NOROESTE
+        if(x1 > xCentro){
+            if(setorAtual > vetSetores[0] && setorAtual < vetSetores[2])return true;
         }
     }
-    //aresta inferior acima do centro
-    if( y4 > yCentro ){
-        if(setorAtual > vetSetores[3] && setorAtual < vetSetores[2]){
-            return true;
+    //SUL
+    if(y1 <= yCentro){
+        //EXTREMO SUL
+        if(x1 <= xCentro && x2 >= xCentro){
+            if(setorAtual > vetSetores[1] && setorAtual < vetSetores[0])return true;
+        }
+        //SUDESTE
+        if(x2 < xCentro){
+            if(setorAtual > vetSetores[2] && setorAtual < vetSetores[0])return true;
+        }
+        //SUDOESTE
+        if(x1 > xCentro){
+            if(setorAtual > vetSetores[1] && setorAtual < vetSetores[3])return true;
         }
     }
-    //aresta superior abaixo do centro
-    if( y3 < yCentro){
-        if(setorAtual < vetSetores[0] && setorAtual > vetSetores[1]){
-            return true;
-        }
+    //LESTE(direita)
+    if(x1 >= xCentro && y1 >= yCentro && y2 <= yCentro){
+        if(setorAtual > vetSetores[2] || setorAtual < vetSetores[1])return true;
     }
-    //aresta inferior abaixo do centro
-    if( y4 < yCentro){
-        if(setorAtual > vetSetores[2] && setorAtual < vetSetores[3]){
-            return true;
-        }
+    //OESTE(esquerda)
+    if(x2 <= xCentro && y1 >= yCentro && y2 <= yCentro){
+        if(setorAtual > vetSetores[0] && setorAtual < vetSetores[3])return true;
     }
-    return false;
 } 
 
 void AtualizaDistancia(Info Hortalica, double x, double y, void* Centro){
     double* vetor = (double*)Centro;
-    double Distancia = sqrt(pow(vetor[0]-x,2))+(pow(vetor[1]-y,2));
+    double Distancia = sqrt(pow(vetor[0]-x,2)+pow(vetor[1]-y,2));
     set_HortaD(Hortalica,Distancia);
+
 }
 
 void CentroRadialTree(RadialTree t,double* num){
@@ -180,9 +172,8 @@ void ListaDeHort(Info i, double x, double y, Lista aux){
 }
 
 int OrdenaDistancia(const void* hort1, const void* hort2) {
-
-    if (get_HortaD((Horta)hort1) == get_HortaD((Horta)hort2)) return 0;
-    else if (get_HortaD((Horta)hort1) > get_HortaD((Horta)hort1)) return 1;
+    if (get_HortaD((Horta*)hort1) == get_HortaD((Horta*)hort2)) return 0;
+    else if (get_HortaD((Horta*)hort1) > get_HortaD((Horta*)hort2)) return 1;
     else return -1;
 }
 

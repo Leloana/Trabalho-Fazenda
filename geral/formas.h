@@ -39,6 +39,8 @@ typedef void* Horta;
 //Inicia uma nova hortalica setando seu peso, tipo e seu geo
 Horta criaHortalica(Forma figura);
 
+void killHorta(Horta hortalica);
+
 void set_HortPraga(Horta hortalica,double newPrag);
 
 double get_HortPraga(Horta hortalica);
@@ -46,10 +48,6 @@ double get_HortPraga(Horta hortalica);
 double get_HortAdubo(Horta hortalica);
 
 void set_HortAdubo(Horta hortalica,double newPrag);
-
-double get_HortCura(Horta hortalica);
-
-void set_HortCura(Horta hortalica,double newCure);
 /*S = MORANGO(strawberrie)
 O = CEBOLA(onion)
 C = CENOURA(carrot)
@@ -57,7 +55,6 @@ P = ABOBORA (pumpkim)
 R = REPOlLHO(repolho)
 G = MATO(grass)*/
 char get_HortType(Horta hortalica);
-
 //retorna o geo da hortalica
 Forma get_HortaFigura(Horta hortalica);
 //seta a distancia da hortalica em relaçao ao centro relativo da arvore

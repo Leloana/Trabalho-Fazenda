@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "formas.h"
 #include "aplicacoes.h"
+#include <string.h>
+#include "arqsvg.h"
 
 static RadialTree ReorganizaRadialT(RadialTree t,int num);
 
@@ -96,26 +99,37 @@ void removeNoRadialT(RadialTree t, Node n){
     _rTree* Tree = (_rTree*)t;
 
     if(n != NULL){
+
     _node* aux = (_node*) n;
+    if(aux==NULL)return;
+
     aux->removido = true;
     Tree->degeneradas++;
         if((double)Tree->degeneradas/Tree->celulas >= (double)Tree->degradacao){
+             printf("    REORGANIZA   ");
             int numCels = (int)(Tree->celulas - Tree->degeneradas);
 
             _rTree* NewTree = (_rTree*)ReorganizaRadialT(Tree, numCels);
-
 
             Tree->celulas = NewTree->celulas;
             Tree->degeneradas = 0;
             Tree->x = NewTree->x;
             Tree->y = NewTree->y;
+            Tree->raiz = NewTree->raiz;
+            NewTree = NULL;
+            // printf(" %c ", get_type(get_HortaFigura(NewTree->raiz->data)));
+            ArqSvg svg = abreEscritaSvg("SVG.SVG");
+            visitaProfundidadeRadialT(Tree,escreveGeralSvgArvore,svg);
+            fechaSvg(svg);
+            printf(" %c ", get_type(get_HortaFigura(Tree->raiz->data)));
         }
     }
     else printf("REMOCAO INTERROMPIDA!!!");
-
+ 
 }
 
 static RadialTree ReorganizaRadialT(RadialTree t,int num){
+   
     _rTree* Tree = (_rTree*)t;
     double centro[2];
     CentroRadialTree(t, centro); //Definindo centro ficticio do retangulo
@@ -123,13 +137,13 @@ static RadialTree ReorganizaRadialT(RadialTree t,int num){
 
     Horta VetorArvore[num]; //Vetor do conteudo da arvore
     IniciandoVetHort(t, VetorArvore);//Colocando as hortalicas no vetor
-    qsort(VetorArvore, num, sizeof(Info), OrdenaDistancia); //Ordenando o vetor com base na funcao OrdenaDistancia
 
-    RadialTree ArvoreAux = newRadialTree(Tree->setores,Tree->degradacao); //Criando arvore auxiliar
+    qsort(VetorArvore, num, sizeof(Horta), OrdenaDistancia); //Ordenando o vetor com base na funcao OrdenaDistancia
+
+    RadialTree ArvoreAux = newRadialTree(4,0.1); //Criando arvore auxiliar
     for (int i=0; i < num; i++) {
         insertRadialT(ArvoreAux,get_x(get_HortaFigura(VetorArvore[i])), get_y(get_HortaFigura(VetorArvore[i])), VetorArvore[i]); //Preenchendo arvore auxiliar
     }
-    //dar free nos nós
 
     return ArvoreAux;
 }
@@ -147,18 +161,17 @@ bool getNodesDentroRegiaoRadialT(RadialTree t, double x1, double y1, double x2, 
 //usando visita em profundidade
     if(raiz != NULL){
         if(DentroRegiaoRet(raiz->x,raiz->y,x1,y1,x2,y2) && !raiz->removido){
-            // printf("Ponto encontrado no Setor!! %lf %lf   \n", raiz->x,raiz->y);
             insertLst(L,raiz);
         }
         for(int i=0;i<Tree->setores;i++){
         //SE O RETANGULO ESTIVER NESTE SETOR CONTINUE SE NAO VOLTA O LOOP
-        // if(ChecaRetSetor(raiz->x,raiz->y,x1,y1,x2,y2,Tree->setores,i)){
+            if(ChecaRetSetor(raiz->x,raiz->y,x1,y1,x2,y2,Tree->setores,i)){
 
-            _rTree aux;
-            aux.raiz = raiz->galhos[i];
-            aux.setores = Tree->setores;
-            getNodesDentroRegiaoRadialT(&aux,x1,y1,x2,y2,L);
-        // }
+                _rTree aux;
+                aux.raiz = raiz->galhos[i];
+                aux.setores = Tree->setores;
+                getNodesDentroRegiaoRadialT(&aux,x1,y1,x2,y2,L);
+            }
         }
     }
     if(!isEmptyLst(L))return true;
@@ -221,6 +234,7 @@ void visitaProfundidadeRadialT(RadialTree t, FvisitaNo f, void *aux){
     
     if(raiz!=NULL){
         
+    if(!raiz->removido)f(raiz->data,raiz->x,raiz->y,aux);
 
     for(int i=0;i<Tree->setores;i++){
         if(raiz->galhos[i]!=NULL){
@@ -230,13 +244,11 @@ void visitaProfundidadeRadialT(RadialTree t, FvisitaNo f, void *aux){
         visitaProfundidadeRadialT(&Taux,f,aux);
         }
     }
-    if(!raiz->removido)f(raiz->data,raiz->x,raiz->y,aux);
     }
 
 }
 
 void visitaLarguraRadialT(RadialTree t, FvisitaNo f, void *aux) {
-    
     _rTree* tree = (_rTree*)t;
 
     if(tree->raiz!= NULL){
@@ -274,11 +286,61 @@ Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux){
     else{
     for(int i=0;i<Tree->setores;i++){
         if(raiz->galhos[i]!=NULL){
-        _rTree Taux;
-        Taux.raiz = raiz->galhos[i];
-        Taux.setores = Tree->setores;
-        return procuraNoRadialT(&Taux,f,aux);
-        }
+            _rTree Taux;
+            Taux.raiz = raiz->galhos[i];
+            Taux.setores = Tree->setores;
+            return procuraNoRadialT(&Taux,f,aux);
+            }
         }
     }
+}
+
+bool printDotRadialTree(RadialTree t, char *fn){
+    _rTree* Tree = (_rTree*)t;
+    _node* raiz = Tree->raiz;
+
+    FILE* DOT = fopen(fn, "a+");
+    if(raiz==NULL)return false;
+
+    for(int i=0;i<Tree->setores;i++){
+        if(raiz->galhos[i]!=NULL){
+            _node* galhoAux = (_node*) raiz->galhos[i];
+    
+            fprintf(DOT,"\n%g:%g", get_x(get_HortaFigura(raiz->data)),get_y(get_HortaFigura(raiz->data)));
+            fprintf(DOT,"-> %g:%g;\n", get_x(get_HortaFigura(galhoAux->data)),get_y(get_HortaFigura(galhoAux->data)));
+
+            if(galhoAux->removido) fprintf(DOT,"%g:%g [style = filled, fillcolor = red, fontcolor=black];",get_x(get_HortaFigura(galhoAux->data)),get_y(get_HortaFigura(galhoAux->data)));
+            if(raiz->removido)fprintf(DOT,"\n%g:%g [style = filled, fillcolor = red, fontcolor=black];", get_x(get_HortaFigura(raiz->data)),get_y(get_HortaFigura(raiz->data)));
+
+            _rTree Taux;
+            Taux.raiz = raiz->galhos[i];
+            Taux.setores = Tree->setores;
+
+            printDotRadialTree(&Taux,fn);
+        }
+    }
+    fclose(DOT);
+    return true;
+}
+
+void killRadialTree(RadialTree t){
+    _rTree* Tree = (_rTree*)t;
+    _node* raiz = Tree->raiz;
+
+    
+    if (raiz == NULL) {
+        return;
+    }
+
+    for(int i=0;i<Tree->setores;i++){
+        if(raiz->galhos[i]!=NULL){
+        _rTree Taux;
+            
+        Taux.raiz = raiz->galhos[i];
+        Taux.setores = Tree->setores;
+        killRadialTree(&Taux);
+        }
+    }
+    if(raiz->data != NULL)(raiz->data);
+    free(raiz);
 }

@@ -13,10 +13,15 @@ typedef struct Horta{
     double Peso;
     double PesoAtual;
     double P_Adubo;
-    double P_Cura;
     double P_Praguejado;
     char typeHort;
 }_horta;
+
+void killHorta(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    killForma(aux->Figura);
+    free(hortalica);
+}
 
 Horta criaHortalica(Forma figura){
     _horta* aux = calloc(1,sizeof(_horta));
@@ -76,16 +81,6 @@ void set_HortAdubo(Horta hortalica,double newAd){
     aux->P_Adubo = newAd;
 }
 
-double get_HortCura(Horta hortalica){
-    _horta* aux = (_horta*)hortalica;
-    return aux->P_Cura;
-}
-
-void set_HortCura(Horta hortalica,double newCure){
-    _horta* aux = (_horta*)hortalica;
-    aux->P_Cura = newCure;
-}
-
 double get_HortPraga(Horta hortalica){
     _horta* aux = (_horta*)hortalica;
     return aux->P_Praguejado;
@@ -128,6 +123,7 @@ void set_HortaP_Atual(Horta hortalica,double newP_Atual){
 
 bool IsColheitadeira(Forma forma){
     if(get_type(forma)!= 'R')return false;
+    // else if(strcmp(get_ret_corp(forma),"none" )== 0)return true;
     else return get_Colheita(forma);
 }
 

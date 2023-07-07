@@ -27,6 +27,8 @@ bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,
 /*Free personalizado para listas com figuras geo*/
 void Executa_ListaFormas(Lista executada);
 
+void Executa_ListaHortas(Lista executada);
+
 void NaoColhido(Info i, double x, double y, void* aux);
 
 void TotalColhido(void* aux, Item i);

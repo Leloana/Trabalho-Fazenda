@@ -9,7 +9,8 @@
 
 int main(void){
     printf("\nIniciando Dados...\n");
-    RadialTree Arvore = newRadialTree(4 ,0.4);
+
+    RadialTree Arvore = newRadialTree(4 ,0.2);
     Lista Region = createLst(-1);
     ArqSvg svg = abreEscritaSvg("DADOS.svg");
     double ContabilidadeColheita;
@@ -17,6 +18,7 @@ int main(void){
     FILE* geo = fopen("TESTE.geo","r");
     FILE* qry = fopen("ARQ.qry","r");
     FILE* txt = fopen("RELATORIO.txt","w");
+    FILE* DOT = fopen("arq.DOT","w");
     printf("\nConcluido!!\n\n");
 
     printf("Lendo GEO...\n");
@@ -42,12 +44,22 @@ int main(void){
     fprintf(txt,"\nTerreno a ser limpo:\nMatos = %g kg\n",ContabilidadeNaoColhidos[5]);
     printf("\nConcluido!!\n\n");
 
+
     printf("Fechando arquivos...\n");
+
     fechaSvg(svg);
     fclose(geo);
     fclose(qry);
     fclose(txt);
     killLst(Region);
-    printf("\nConcluido!!\n\n");
+
+    fprintf(DOT,"digraph G {\n");  
+
+    // printDotRadialTree(Arvore,"arq.DOT"); 
+
+    killRadialTree(Arvore);
+    free(Arvore);
+    fprintf(DOT,"\n}");
+    fclose(DOT);
     return 0;
 }

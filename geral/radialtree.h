@@ -146,4 +146,14 @@ Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux);
    Neste caso, retorna o no' encontrado. Caso a busca falhe,
    retorna NULL.
  */
+
+bool printDotRadialTree(RadialTree t, char *fn);
+/* Gera representacao da arvore no arquivo fn, usando a Dot Language
+   (ver https://graphviz.org/). Retorna falso, caso o arquivo nao possa
+   ser criado (para escrita); true, caso contrario)
+*/
+
+void killRadialTree(RadialTree t);
+/* Libera a memoria usada pela arvore t.
+ */
 #endif

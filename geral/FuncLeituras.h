@@ -48,7 +48,9 @@ void ReportaColheitadeiras(FILE* txt,Lista _Colheitadeiras);
 
 void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio);
 
-bool checaDentroAdubo(void* atingida, void* adubo);
+// bool checaDentroAdubo(void* atingida, void* adubo);
+
+bool CheckArea(void* atual, double x1, double y1, double x2, double y2);
 
 void atualizaPeso(void* hortalica);
 

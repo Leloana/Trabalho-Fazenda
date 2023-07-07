@@ -121,7 +121,7 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root,double* contabilidade)
                 fprintf(txt,"\n\n[*] hvt %d %d %s", atoi(aux[1]), atoi(aux[2]),aux[3]);//reporta o comando ao relatorio
                 *contabilidade += Harvest(txt,svg,root,Colhido,atoi(aux[1]),atoi(aux[2]),aux[3]);
 
-                for(int i = 0;i < 3;i++)free(aux[i]);
+                for(int i = 0;i < 4;i++)free(aux[i]);
             }
             else if(strcmp(aux[0], "cl") == 0){//Seta colheiradeiras
                 fprintf(txt,"\n\n[*] cl %d ", atoi(aux[1]));
@@ -161,7 +161,7 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root,double* contabilidade)
             }
             else if(strcmp(aux[0], "c?") == 0){//reporta TODAS colheitadeiras
                 fprintf(txt,"\n\n[*] c?");
-                fprintf(txt,"\nExistem %d Colheitadeiras:\n", lengthLst(Colheitadeiras));
+                fprintf(txt,"\nExiste(m) %d Colheitadeira(s):\n", lengthLst(Colheitadeiras));
                 ReportaColheitadeiras(txt,Colheitadeiras);
 
                 free(aux[0]);
@@ -183,4 +183,6 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root,double* contabilidade)
         }
         else fprintf(txt,"\n\nNao houve Colheitas.\n");
     }
+    killLst(Colheitadeiras);
+    Executa_ListaHortas(Colhido);
 }
