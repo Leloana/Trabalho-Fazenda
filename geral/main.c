@@ -28,10 +28,16 @@ int main(void){
     printf("Lendo QRY...\n");
     LerQry(qry,txt,svg,Arvore,&ContabilidadeColheita);
     printf("\nConcluido!!\n\n");
+    
+    fprintf(DOT,"digraph G {\n");  
+
+    printDotRadialTree(Arvore,"arq.DOT"); 
+        fprintf(DOT,"\n}");
 
     printf("Escrevendo SVG...\n");
     visitaProfundidadeRadialT(Arvore,escreveGeralSvgArvore,svg);
     printf("\nConcluido!!\n\n");
+    
 
     printf("Finalizando TXT...\n");
     visitaProfundidadeRadialT(Arvore,NaoColhido,ContabilidadeNaoColhidos); 
@@ -53,13 +59,10 @@ int main(void){
     fclose(txt);
     killLst(Region);
 
-    fprintf(DOT,"digraph G {\n");  
-
-    // printDotRadialTree(Arvore,"arq.DOT"); 
 
     killRadialTree(Arvore);
     free(Arvore);
-    fprintf(DOT,"\n}");
+
     fclose(DOT);
     return 0;
 }

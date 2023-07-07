@@ -98,8 +98,8 @@ Node getNodeRadialT(RadialTree t, double x, double y, double epsilon);
  * Ou seja, |anc.x - x | < epsilon e |anc.y - y | < epsilon.
  * Retorna NULL caso nao tenha encontrado o no'.
  */
-
-void removeNoRadialT(RadialTree t, Node n);
+RadialTree ReorganizaRadialT(RadialTree t);
+RadialTree* removeNoRadialT(RadialTree t, Node n);
 /*
  * Marca como removido o no' n. Caso, apos a remocao, o fator de degradacao
  * superar o limiar definido na criacao, a arvore e' recriada sem os nos delidos.
@@ -146,7 +146,6 @@ Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux);
    Neste caso, retorna o no' encontrado. Caso a busca falhe,
    retorna NULL.
  */
-
 bool printDotRadialTree(RadialTree t, char *fn);
 /* Gera representacao da arvore no arquivo fn, usando a Dot Language
    (ver https://graphviz.org/). Retorna falso, caso o arquivo nao possa

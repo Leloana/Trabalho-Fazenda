@@ -10,6 +10,7 @@ typedef struct text{
     char* tex, *cor, *corbord,*ancora;
     char fFamily[50], fWeight[50], fSize[50];
 
+
 }text;
 
 void killTexto(Texto T){

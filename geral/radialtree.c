@@ -7,7 +7,7 @@
 #include <string.h>
 #include "arqsvg.h"
 
-static RadialTree ReorganizaRadialT(RadialTree t,int num);
+
 
 typedef struct node{
     
@@ -95,52 +95,62 @@ Node getNodeRadialT(RadialTree t, double x, double y, double epsilon){
     }
 }
 
-void removeNoRadialT(RadialTree t, Node n){
+RadialTree* removeNoRadialT(RadialTree t, Node n){
     _rTree* Tree = (_rTree*)t;
 
     if(n != NULL){
-
     _node* aux = (_node*) n;
-    if(aux==NULL)return;
 
     aux->removido = true;
     Tree->degeneradas++;
+
+            printf("\n\n %d  %d",Tree->degeneradas,Tree->celulas);
         if((double)Tree->degeneradas/Tree->celulas >= (double)Tree->degradacao){
-             printf("    REORGANIZA   ");
+             printf(" \n   REORGANIZA   ");
             int numCels = (int)(Tree->celulas - Tree->degeneradas);
+            _rTree* NewTree = (_rTree*) ReorganizaRadialT(Tree);
 
-            _rTree* NewTree = (_rTree*)ReorganizaRadialT(Tree, numCels);
+            FILE* aa = fopen("DOTDOT.DOT", "w");
+            printDotRadialTree(NewTree,"DOTDOT.DOT");
+            fclose(aa);
 
-            Tree->celulas = NewTree->celulas;
-            Tree->degeneradas = 0;
-            Tree->x = NewTree->x;
-            Tree->y = NewTree->y;
-            Tree->raiz = NewTree->raiz;
-            NewTree = NULL;
-            // printf(" %c ", get_type(get_HortaFigura(NewTree->raiz->data)));
-            ArqSvg svg = abreEscritaSvg("SVG.SVG");
-            visitaProfundidadeRadialT(Tree,escreveGeralSvgArvore,svg);
-            fechaSvg(svg);
-            printf(" %c ", get_type(get_HortaFigura(Tree->raiz->data)));
+            ArqSvg BB = abreEscritaSvg("BB.svg");
+            visitaProfundidadeRadialT(NewTree,escreveGeralSvgArvore,BB);
+            fechaSvg(BB);
+            return (RadialTree*)NewTree;
         }
+        return(RadialTree*)Tree;
     }
     else printf("REMOCAO INTERROMPIDA!!!");
- 
 }
 
-static RadialTree ReorganizaRadialT(RadialTree t,int num){
+RadialTree ReorganizaRadialT(RadialTree t){
    
     _rTree* Tree = (_rTree*)t;
     double centro[2];
     CentroRadialTree(t, centro); //Definindo centro ficticio do retangulo
-    visitaProfundidadeRadialT(t, AtualizaDistancia, centro); //Definindo Atualizando a distancia entre os nos e esse ponto
+    Lista Hortas = createLst(-1);
+    visitaProfundidadeRadialT(t,ListaDeHort,Hortas);
+    int num = lengthLst(Hortas);
+    printf(" %d ", num);
 
+    Iterador K = createIterator(Hortas,false); //Definindo Atualizando a distancia entre os nos e esse ponto
+
+    ArqSvg aaa = abreEscritaSvg("CC.svg");
+    fold(map(Hortas,get_HortaFigura),escreveGeralSvgLista,aaa);
+    fechaSvg(aaa);
+    
     Horta VetorArvore[num]; //Vetor do conteudo da arvore
-    IniciandoVetHort(t, VetorArvore);//Colocando as hortalicas no vetor
-
+    int L = 0;
+    while(!isIteratorEmpty(Hortas,K)){
+        Horta hort = getIteratorNext(Hortas,K);
+        AtualizaDistancia(hort,get_x(get_HortaFigura(hort)),get_y(get_HortaFigura(hort)),centro);
+        VetorArvore[L] = hort;
+        L++;
+    }
     qsort(VetorArvore, num, sizeof(Horta), OrdenaDistancia); //Ordenando o vetor com base na funcao OrdenaDistancia
 
-    RadialTree ArvoreAux = newRadialTree(4,0.1); //Criando arvore auxiliar
+    RadialTree ArvoreAux = newRadialTree(Tree->setores,Tree->degradacao); //Criando arvore auxiliar
     for (int i=0; i < num; i++) {
         insertRadialT(ArvoreAux,get_x(get_HortaFigura(VetorArvore[i])), get_y(get_HortaFigura(VetorArvore[i])), VetorArvore[i]); //Preenchendo arvore auxiliar
     }
@@ -235,6 +245,7 @@ void visitaProfundidadeRadialT(RadialTree t, FvisitaNo f, void *aux){
     if(raiz!=NULL){
         
     if(!raiz->removido)f(raiz->data,raiz->x,raiz->y,aux);
+    // else printf("\n REMOVIDO");
 
     for(int i=0;i<Tree->setores;i++){
         if(raiz->galhos[i]!=NULL){
@@ -300,17 +311,16 @@ bool printDotRadialTree(RadialTree t, char *fn){
     _node* raiz = Tree->raiz;
 
     FILE* DOT = fopen(fn, "a+");
-    if(raiz==NULL)return false;
+    if(raiz == NULL || raiz->data == NULL)return false;
 
     for(int i=0;i<Tree->setores;i++){
         if(raiz->galhos[i]!=NULL){
             _node* galhoAux = (_node*) raiz->galhos[i];
     
-            fprintf(DOT,"\n%g:%g", get_x(get_HortaFigura(raiz->data)),get_y(get_HortaFigura(raiz->data)));
-            fprintf(DOT,"-> %g:%g;\n", get_x(get_HortaFigura(galhoAux->data)),get_y(get_HortaFigura(galhoAux->data)));
+            fprintf(DOT,"\n\"%g:%g\"", get_HortX(raiz->data),get_HortY(raiz->data));
+            fprintf(DOT,"-> \"%g:%g\";\n", get_HortX(galhoAux->data),get_HortY(galhoAux->data));
 
-            if(galhoAux->removido) fprintf(DOT,"%g:%g [style = filled, fillcolor = red, fontcolor=black];",get_x(get_HortaFigura(galhoAux->data)),get_y(get_HortaFigura(galhoAux->data)));
-            if(raiz->removido)fprintf(DOT,"\n%g:%g [style = filled, fillcolor = red, fontcolor=black];", get_x(get_HortaFigura(raiz->data)),get_y(get_HortaFigura(raiz->data)));
+            if(galhoAux->removido) fprintf(DOT,"\"%g:%g\" [style = filled, fillcolor = red, fontcolor=black];",get_HortX(galhoAux->data),get_HortY(galhoAux->data));
 
             _rTree Taux;
             Taux.raiz = raiz->galhos[i];
@@ -319,6 +329,7 @@ bool printDotRadialTree(RadialTree t, char *fn){
             printDotRadialTree(&Taux,fn);
         }
     }
+    if(raiz->removido)fprintf(DOT,"\n\"%g:%g\" [style = filled, fillcolor = red, fontcolor=black];", get_HortX(raiz->data),get_HortY(raiz->data));
     fclose(DOT);
     return true;
 }

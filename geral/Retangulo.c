@@ -11,6 +11,7 @@ typedef struct rect{
     int ID;
     double x, y, larg, alt, rotacao,dasharray;
     char* cor, *corbord;
+
     
 }ret;
 

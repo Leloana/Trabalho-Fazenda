@@ -11,7 +11,7 @@ void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
     Forma imagem = get_HortaFigura(_hortalica);
 
     if(_hortalica != NULL){
-    removeNoRadialT(root,getNodeRadialT(root,get_x(imagem),get_y(imagem),0.0000001));
+    root = removeNoRadialT(root,getNodeRadialT(root,get_x(imagem),get_y(imagem),0.0000001));
     
     reporta_figura(txt,imagem);
     fprintf(txt,"\nCOORDENADA INICIAL = (%lf,%lf)", get_x(imagem), get_y(imagem));
@@ -105,7 +105,7 @@ double AnaliseDeColheita(FILE* txt,RadialTree root,double x1, double y1,
                 insertLst(ColhidosTotal,hortalica);
                 contabilidade += get_HortaP_Atual(hortalica);
                 reporta_figura(txt,checkFarm);//reporta no txt
-                removeNoRadialT(root,removido);//remove nó
+                root = removeNoRadialT(root,removido);//remove nó
             }
         }
         killIterator(Nos_Colhidos,K);
@@ -341,7 +341,7 @@ void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double w
 }
 
 bool CheckArea(void* atual, double x1, double y1, double x2, double y2){
-    Forma Figura = get_HortaFigura(atual);
+    Forma Figura = (Forma)atual;
     
     if(get_type(Figura)=='R'){
         if(get_ret_x(Figura)+get_ret_larg(Figura) > x2)return false;

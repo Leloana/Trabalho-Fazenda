@@ -41,6 +41,10 @@ Horta criaHortalica(Forma figura);
 
 void killHorta(Horta hortalica);
 
+double get_HortY(Horta hortalica);
+
+double get_HortX(Horta hortalica);
+
 void set_HortPraga(Horta hortalica,double newPrag);
 
 double get_HortPraga(Horta hortalica);

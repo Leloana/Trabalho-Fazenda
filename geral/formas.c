@@ -9,6 +9,8 @@
 
 typedef struct Horta{
     Forma Figura;
+    double x;
+    double y;
     double Distancia;
     double Peso;
     double PesoAtual;
@@ -29,6 +31,8 @@ Horta criaHortalica(Forma figura){
     aux->Distancia = 0.0;
     aux->P_Adubo = 0.0;
     aux->P_Praguejado = 0.0;
+    aux->x = get_x(figura);
+    aux->y = get_y(figura);
     if(get_type(figura)=='T'){
         if(strcmp(get_text_texto(figura),"@")==0){
             aux->typeHort = 'O';//ONION
@@ -64,6 +68,16 @@ Horta criaHortalica(Forma figura){
     aux->PesoAtual = aux->Peso;
         
     return aux;
+}
+
+double get_HortX(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->x;
+}
+
+double get_HortY(Horta hortalica){
+    _horta* aux = (_horta*)hortalica;
+    return aux->y;
 }
 
 char get_HortType(Horta hortalica){
@@ -128,7 +142,6 @@ bool IsColheitadeira(Forma forma){
 }
 
 char get_type(void* point){
-
     char circulo = get_circ_type(point);
     char retangulo = get_ret_type(point);
     char linha = get_lin_type(point);
