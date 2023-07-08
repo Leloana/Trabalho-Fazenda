@@ -80,6 +80,16 @@ double get_HortY(Horta hortalica){
     return aux->y;
 }
 
+void set_HortX(Horta hortalica, double value){
+    _horta* aux = (_horta*)hortalica;
+    aux->x = value;
+}
+
+void set_HortY(Horta hortalica,double value){
+    _horta* aux = (_horta*)hortalica;   
+    aux->y = value;
+}
+
 char get_HortType(Horta hortalica){
     _horta* aux = (_horta*)hortalica;
     return aux->typeHort;

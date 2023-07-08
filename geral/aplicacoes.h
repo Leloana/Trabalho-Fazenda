@@ -8,6 +8,9 @@
 #include "formas.h"
 #include <math.h>
 
+FILE* AbreEscritaDot(char* fn);
+
+void FechaEscrita(char* fn);
 /*Retorna a hortalica indicada por ID ao usar a funcao procuraNoRadialT de "radialtree.h" e a funcao
 "ajudaID"*/
 Horta Teste_achaIDNaArvore(RadialTree t, int ID);

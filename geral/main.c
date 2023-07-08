@@ -7,10 +7,12 @@
 #include "arqsvg.h"
 #include "Leituras.h"
 
-int main(void){
-    printf("\nIniciando Dados...\n");
 
-    RadialTree Arvore = newRadialTree(4 ,0.2);
+
+int main(void){
+
+    printf("\nIniciando Dados...\n");
+    RadialTree Arvore = newRadialTree(8 ,0.2);
     Lista Region = createLst(-1);
     ArqSvg svg = abreEscritaSvg("DADOS.svg");
     double ContabilidadeColheita;
@@ -18,7 +20,6 @@ int main(void){
     FILE* geo = fopen("TESTE.geo","r");
     FILE* qry = fopen("ARQ.qry","r");
     FILE* txt = fopen("RELATORIO.txt","w");
-    FILE* DOT = fopen("arq.DOT","w");
     printf("\nConcluido!!\n\n");
 
     printf("Lendo GEO...\n");
@@ -28,11 +29,12 @@ int main(void){
     printf("Lendo QRY...\n");
     LerQry(qry,txt,svg,Arvore,&ContabilidadeColheita);
     printf("\nConcluido!!\n\n");
-    
-    fprintf(DOT,"digraph G {\n");  
 
+    Arvore = ReorganizaRadialT(Arvore);
+
+    FILE* DOT = AbreEscritaDot("arq.DOT");  
     printDotRadialTree(Arvore,"arq.DOT"); 
-        fprintf(DOT,"\n}");
+    FechaEscrita("arq.DOT");
 
     printf("Escrevendo SVG...\n");
     visitaProfundidadeRadialT(Arvore,escreveGeralSvgArvore,svg);
@@ -63,6 +65,5 @@ int main(void){
     killRadialTree(Arvore);
     free(Arvore);
 
-    fclose(DOT);
     return 0;
 }

@@ -39,6 +39,10 @@ typedef void* Horta;
 //Inicia uma nova hortalica setando seu peso, tipo e seu geo
 Horta criaHortalica(Forma figura);
 
+void set_HortX(Horta hortalica, double value);
+
+void set_HortY(Horta hortalica,double value);
+
 void killHorta(Horta hortalica);
 
 double get_HortY(Horta hortalica);

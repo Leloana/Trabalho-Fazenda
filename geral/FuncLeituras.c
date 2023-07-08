@@ -19,18 +19,20 @@ void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
     mvForma(imagem, X,Y);//forma soma as coordenadas antigas às inseridas
    
     fprintf(txt,"\nCOORDENADA FINAL = (%lf,%lf)\n", get_x(imagem), get_y(imagem));
-
+    set_HortX(_hortalica,get_x(imagem));
+    set_HortY(_hortalica,get_y(imagem));
     insertRadialT(root,get_x(imagem),get_y(imagem),_hortalica);
     }
     else printf("\nERRO NA ENTRADA DA FUNCAO [*]mv -> ID %d NAO EXISTE\n",ID);
 }
 
-double Harvest(FILE* txt,FILE* svg, RadialTree root,Lista Colhidos,int ID, int passos, char* cardial){
+double Harvest(FILE* txt,FILE* svg, RadialTree root,Lista Colhidos,int ID, int pas, char* cardial){
     Lista Nos_Colhidos = createLst(-1);
     Horta _Colhehorta = Teste_achaIDNaArvore(root,ID);
     Retangulo Colheitadeira = get_HortaFigura(_Colhehorta);
     set_Colheita(Colheitadeira,true);
     Retangulo Borda;
+    int passos = pas-1;
     double Contabilidade = 0.0;
     if(Colheitadeira != NULL && IsColheitadeira(Colheitadeira)){
     double Xo = get_x(Colheitadeira);//X inicial e Y inicial
@@ -84,7 +86,7 @@ double Harvest(FILE* txt,FILE* svg, RadialTree root,Lista Colhidos,int ID, int p
     }
     }
     else printf("\nERRO NA ENTRADA DA FUNCAO [*]hrv -> ID %d NAO EXISTE\n",ID);
-    fprintf(txt,"\n%d itens foram colhidos!",lengthLst(Nos_Colhidos)-1);
+    if(!isEmptyLst(Nos_Colhidos))fprintf(txt,"\n%d itens foram colhidos!",lengthLst(Nos_Colhidos)-1);
     fprintf(txt,"\nTotal da colheita = %g kg",Contabilidade);
     killLst(Nos_Colhidos);
     return Contabilidade;
@@ -153,7 +155,7 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
                         if(get_HortPraga(Atingido) > 0.75){
                         Texto morte = criaTexto(-1,get_x(get_HortaFigura(Atingido)),get_y(get_HortaFigura(Atingido)),"#FF0000","#FF0000","m","x");
                         escreveTextoSvg(svg,morte);
-                        removeNoRadialT(root,No_atual);
+                        root = removeNoRadialT(root,No_atual);
                         killTexto(morte); 
                         fprintf(txt,"\nA planta ID = %d morreu de pragas",get_ID(get_HortaFigura(Atingido)));
                     }
@@ -335,7 +337,6 @@ void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double w
     escreveCirculoSvg(svg,ponto);
     killCirc(ponto);
     killLst(Atingidos);
-        fold(Adubos,escreveGeralSvgLista,svg);
     Executa_ListaFormas(Adubos);
     killRet(Borda);
 }

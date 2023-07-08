@@ -3,6 +3,22 @@
 #include "arqsvg.h"
 #include "FuncLeituras.h"
 
+
+FILE* AbreEscritaDot(char* fn){
+    FILE* dot = fopen(fn, "w");
+
+    fprintf(dot, "digraph RadialTree {\n\n");
+    
+    fclose(dot);
+}
+
+
+void FechaEscrita(char* fn){
+    FILE* DOT = fopen(fn,"a+");
+    fprintf(DOT,"\n}");
+    fclose(DOT);
+}
+
 void Executa_ListaFormas(Lista executada){
     Iterador apaga = createIterator(executada,false);
     while(!isIteratorEmpty(executada,apaga))killForma(getIteratorNext(executada,apaga));
@@ -76,10 +92,10 @@ bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,
 
     if(DentroRegiaoRet(xCentro,yCentro,x1,y1,x2,y2))return true;
 
-    vetSetores[0] = Setor(setores,xCentro,yCentro,x3,y3);
-    vetSetores[1] = Setor(setores,xCentro,yCentro,x1,y1);
-    vetSetores[2] = Setor(setores,xCentro,yCentro,x4,y4);
-    vetSetores[3] = Setor(setores,xCentro,yCentro,x2,y2);
+    vetSetores[0] = Setor(setores,xCentro,yCentro,x3,y3);//Canto superior direito
+    vetSetores[1] = Setor(setores,xCentro,yCentro,x1,y1);//canto superior esquerdo
+    vetSetores[2] = Setor(setores,xCentro,yCentro,x4,y4);//canto inferior esquerdo
+    vetSetores[3] = Setor(setores,xCentro,yCentro,x2,y2);//canto inferior direito
     for(int i=0; i<4;i++){
         if(setorAtual == vetSetores[i]){
             return true;
