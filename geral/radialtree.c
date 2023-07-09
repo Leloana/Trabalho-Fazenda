@@ -90,8 +90,8 @@ Node getNodeRadialT(RadialTree t, double x, double y, double epsilon){
     }
 }
 
-RadialTree removeNoRadialT(RadialTree t, Node n){
-    _rTree* Tree = (_rTree*)t;
+void removeNoRadialT(RadialTree* t, Node n){
+    _rTree* Tree = (_rTree*)(*t);
 
     if(n != NULL){
     _node* aux = (_node*) n;
@@ -99,15 +99,15 @@ RadialTree removeNoRadialT(RadialTree t, Node n){
     aux->removido = true;
     Tree->degeneradas++;
 
-
+        printf(" %d %d\n",Tree->degeneradas,Tree->celulas);
         if((double)Tree->degeneradas/Tree->celulas >= (double)Tree->degradacao){
-             printf(" \n   REORGANIZA   ");
+            //  printf(" \n   REORGANIZA   ");
 
-            _rTree* NewTree = (_rTree*)ReorganizaRadialT(Tree);
-
-            return NewTree;
+            // (*t) = (_rTree*)ReorganizaRadialT(Tree);
+            // AbreEscritaDot("DOT.DOT");
+            // printDotRadialTree(*t,"DOT.DOT"); 
+            // FechaEscrita("DOT.DOT");
         }
-        return Tree;
     }
     else printf("REMOCAO INTERROMPIDA!!!");
 }
@@ -121,7 +121,6 @@ RadialTree ReorganizaRadialT(RadialTree t){
 
     visitaProfundidadeRadialT(t,ListaDeHort,Hortas);
     int num = lengthLst(Hortas);
-    printf("\n %d ", num);
     Iterador K = createIterator(Hortas,false); //Definindo Atualizando a distancia entre os nos e esse ponto
 
     
@@ -230,7 +229,6 @@ void visitaProfundidadeRadialT(RadialTree t, FvisitaNo f, void *aux){
     if(raiz!=NULL){
         
     if(!raiz->removido)f(raiz->data,get_x(get_HortaFigura(raiz->data)),get_y(get_HortaFigura(raiz->data)),aux);
-    // else printf("\n REMOVIDO");
 
     for(int i=0;i<Tree->setores;i++){
         if(raiz->galhos[i]!=NULL){
@@ -291,31 +289,37 @@ Node procuraNoRadialT(RadialTree t, FsearchNo f, void *aux){
     }
 }
 
-bool printDotRadialTree(RadialTree t, char *fn){
-    _rTree* Tree = (_rTree*)t;
-    _node* raiz = Tree->raiz;
+bool printDotRadialTree(RadialTree t, char *fn) {
 
-    FILE* DOT = fopen(fn, "a+");
-    if(raiz == NULL || raiz->data == NULL)return false;
+    _rTree* arvore = (_rTree*)t;
+    _node* node = arvore->raiz;
+    if (node == NULL) return false;
 
-    for(int i=0;i<Tree->setores;i++){
-        if(raiz->galhos[i]!=NULL){
-            _node* galhoAux = (_node*) raiz->galhos[i];
-    
-            fprintf(DOT,"\n\t\"%g:%g\"", get_HortX(raiz->data),get_HortY(raiz->data));
-            fprintf(DOT,"-> \"%g:%g\";", get_HortX(galhoAux->data),get_HortY(galhoAux->data));
+    FILE* dot = fopen(fn, "a+");
+    if (dot == NULL) return false;
+    for (int i=0; i<arvore->setores; i++) {
+        char PaiRemovido[5] = "", FilhoRemovido[5] = "";
+        if (node->galhos[i] != NULL) {
+            _node* galhoaux = (_node*)node->galhos[i];
 
-            if(galhoAux->removido) fprintf(DOT,"\n\t\"%g:%g\" [style = filled, fillcolor = red, fontcolor=black];",get_HortX(galhoAux->data),get_HortY(galhoAux->data));
-
-            _rTree Taux;
-            Taux.raiz = raiz->galhos[i];
-            Taux.setores = Tree->setores;
-
-            printDotRadialTree(&Taux,fn);
+            if (node->removido) strncpy(PaiRemovido, "*", 5);
+            if (galhoaux->removido) strncpy(FilhoRemovido, "*", 5); 
+            fprintf (dot, "\t\"%d_%d %s\" -> \"%d_%d %s\";\n", (int)get_HortX(node->data), (int)get_HortY(node->data), PaiRemovido,
+                        (int)get_HortX(galhoaux->data), (int)get_HortY(galhoaux->data), FilhoRemovido);
+            if (node->removido) fprintf (dot, "\t\"%d_%d %s\" [style=filled, fillcolor=red, fontcolor=black];\n", 
+                                    (int)get_HortX(node->data), (int)get_HortY(node->data), PaiRemovido);
         }
     }
-    if(raiz->removido)fprintf(DOT,"\n\t\"%g:%g\" [style = filled, fillcolor = red, fontcolor=black];", get_HortX(raiz->data),get_HortY(raiz->data));
-    fclose(DOT);
+    for (int i=0; i<arvore->setores; i++) {
+        if (node->galhos[i] != NULL) {
+            _rTree radial_aux;
+            radial_aux.setores = arvore->setores;
+            radial_aux.raiz = node->galhos[i];
+
+            printDotRadialTree(&radial_aux, fn);
+        }
+    }
+    fclose(dot);
     return true;
 }
 

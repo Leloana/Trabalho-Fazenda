@@ -8,6 +8,13 @@
 #include "formas.h"
 #include <math.h>
 
+
+void PassaArguemtos(char** PathSaida, char** PathEntrada, char** NomeGeo, char** NomeQry, int* Ns, double* Fd, int argc, char** argv);
+
+char* CriaNomeArq (char* NomeGeo, char* NomeQry) ;
+
+char* ConcatenaPath (char* Path, char* nome);
+
 FILE* AbreEscritaDot(char* fn);
 
 void FechaEscrita(char* fn);
