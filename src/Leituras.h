@@ -1,6 +1,8 @@
 #ifndef LEGEO_H
 #define LEGEO_H
 
+/*Header destinada a Ler os arquivos geo e qry, incrementando ou fazendo mudanças no banco de dados*/
+
 #include <stdio.h>
 #include "radialtree.h"
 #include <stdlib.h>

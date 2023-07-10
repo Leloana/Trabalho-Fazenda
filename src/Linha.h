@@ -1,6 +1,8 @@
 #ifndef LIN_H
 #define LIN_H
 
+/*Header com todas as funçoes do geo Linha, aqui a forma Linha é criada e modificada*/
+
 typedef void* Linha;
 
 void killLinha(Linha L);

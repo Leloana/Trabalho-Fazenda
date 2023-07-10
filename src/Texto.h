@@ -1,6 +1,8 @@
 #ifndef TEX_H
 #define TEX_H
 
+/*Header com todas as funçoes do geo Texto, aqui a forma Texto é criada e modificada*/
+
 typedef void* Texto;
 
 void killTexto(Texto T);

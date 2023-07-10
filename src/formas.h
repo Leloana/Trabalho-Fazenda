@@ -1,6 +1,10 @@
 #ifndef FORMAS_H
 #define FORMAS_H
 
+/*Essa header é feita para facilitar o acesso a varias formas diferentes(Circulos, retangulos...)por funçoes mais gerais
+que primeiro buscam o tipo da forma, e depois retornam a função desejada, essa header tambem contem as funçoes
+para ter acesso a Horta(informação guardada pelos nodes da arvore radial)*/
+
 #include <stdio.h>
 
 
@@ -38,23 +42,23 @@ void reporta_figura(void* txt,void* guarda_forma);
 typedef void* Horta;
 //Inicia uma nova hortalica setando seu peso, tipo e seu geo
 Horta criaHortalica(Forma figura);
-
+//seta a nova posição da hortalica
 void set_HortX(Horta hortalica, double value);
-
+// seta a nova posição da hortalica
 void set_HortY(Horta hortalica,double value);
-
+//da fre personalizado na hortalica
 void killHorta(Horta hortalica);
-
+//retorna o y da hortalica
 double get_HortY(Horta hortalica);
-
+//retorna o x da hortalica
 double get_HortX(Horta hortalica);
-
+//seta a % de praga da hortalica
 void set_HortPraga(Horta hortalica,double newPrag);
-
+//retorna a % de praga da hortalica
 double get_HortPraga(Horta hortalica);
-
+//Retorna a % de adubo da hortalica
 double get_HortAdubo(Horta hortalica);
-
+//seta a % de adubo da hortalica
 void set_HortAdubo(Horta hortalica,double newPrag);
 /*S = MORANGO(strawberrie)
 O = CEBOLA(onion)

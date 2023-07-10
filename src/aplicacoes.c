@@ -3,16 +3,40 @@
 #include "arqsvg.h"
 #include "FuncLeituras.h"
 #include <string.h>
+/*Ess*/
 
-void PassaArguemtos(char** PathSaida, char** PathEntrada, char** NomeGeo, char** NomeQry, int* Ns, double* Fd, int argc, char** argv){
-
-    for (int i=1; i<argc; i++) {
-        if (strcmp(argv[i], "-e") == 0 && (i+1) < argc) *PathEntrada = argv[++i];
-        else if (strcmp(argv[i], "-o") == 0 && (i+1) < argc) *PathSaida = argv[++i];
-        else if (strcmp(argv[i], "-f") == 0 && (i+1) < argc) *NomeGeo = argv[++i];
-        else if (strcmp(argv[i], "-q") == 0 && (i+1) < argc) *NomeQry = argv[++i];
-        else if (strcmp(argv[i], "-ns") == 0 && (i+1) < argc) *Ns = atoi(argv[++i]);
-        else if (strcmp(argv[i], "-fd") == 0 && (i+1) < argc) *Fd = strtod(argv[++i], NULL)/100; 
+void PassaArgs(char** PathSaida, char** PathEntrada, char** NomeGeo, char** NomeQry, int* Ns, double* Fd, int argc, char** argv){
+    int i=1;
+    while(i<argc){
+        //path da entrada
+        if(strcmp("-e",argv[i])==0 && (i+1)!=argc){
+            i++;
+            *PathEntrada=argv[i];
+        }
+        //arquivo .geo
+        else if(strcmp("-f",argv[i])==0 && (i+1)!=argc){
+            i++;
+            *NomeGeo=argv[i];
+        }
+        //path da saida
+        else if(strcmp("-o",argv[i])==0 && (i+1)!=argc){
+            i++;
+            *PathSaida=argv[i];
+        }
+        //arquivo de consulta
+        else if(strcmp("-q",argv[i])==0 && (i+1)!=argc){
+            i++;
+            *NomeQry=argv[i];
+        }
+        else if(strcmp("-fd",argv[i])==0 && (i+1)!=argc){
+            i++;
+            *Fd=strtod(argv[i],NULL);
+        }
+        else if(strcmp("-ns",argv[i])==0 && (i+1)!=argc){
+            i++;
+            *Ns=atoi(argv[i]);
+        }
+        i++;
     }
 }
 

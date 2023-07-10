@@ -8,15 +8,16 @@
 #include "formas.h"
 #include <math.h>
 
-
-void PassaArguemtos(char** PathSaida, char** PathEntrada, char** NomeGeo, char** NomeQry, int* Ns, double* Fd, int argc, char** argv);
-
+/*Essa header contem funçoes um pouco mais gerais, que foram usadas pouco e nao tem um uso muito especifico*/
+//Passa os argumentos que serao pegos do argv da chamada
+void PassaArgs(char** PathSaida, char** PathEntrada, char** NomeGeo, char** NomeQry, int* Ns, double* Fd, int argc, char** argv);
+//junta o nomeGeo ao NomeQry fazendo as mudanças necessarias
 char* CriaNomeArq (char* NomeGeo, char* NomeQry) ;
-
+//Junta Path com nome fazendo as mudanças necessárias
 char* ConcatenaPath (char* Path, char* nome);
-
+//inicia a escrita do arquivo dot e retorna o arquivo
 FILE* AbreEscritaDot(char* fn);
-
+//Fecha a escrita do arquivo dot
 void FechaEscrita(char* fn);
 /*Retorna a hortalica indicada por ID ao usar a funcao procuraNoRadialT de "radialtree.h" e a funcao
 "ajudaID"*/
@@ -36,14 +37,15 @@ a busca naquele setor, caso contrario retorna falso e a arvore interrompe a busc
 bool ChecaRetSetor(double xCentro, double yCentro,double x1,double y1,double x2,double y2,int setores,int setorAtual);
 /*Free personalizado para listas com figuras geo*/
 void Executa_ListaFormas(Lista executada);
-
+/*Free personalizado para listas com Hortas*/
 void Executa_ListaHortas(Lista executada);
-
+//Passa pela arvore radial colocando as Hortas nao colhidas numa lista
 void NaoColhido(Info i, double x, double y, void* aux);
-
+//Faz os calculos do total colhido
 void TotalColhido(void* aux, Item i);
 
 /*=====Funcoes para reorganizar arvore caso o fator degradaçao atual da arvore supere o valor maximo aceito=====*/
+
 /*Atualiza a distancia da hortalica em relaçao ao centro da arvore que é dado pelo void* Centro*/
 void AtualizaDistancia(Info Hortalica, double x, double y, void* Centro);
 /*Funcao base para o uso de qsort fornecido pela linguagem C99*/

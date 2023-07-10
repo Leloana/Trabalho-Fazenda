@@ -53,6 +53,7 @@ Node insertRadialT(RadialTree t, double x, double y, Info i){
         aux->data = i;
         aux->removido = false;
         aux->galhos = calloc(Tree->setores,sizeof(Node));//seto todos os setores do node para nulo
+        for (int i=0; i<Tree->setores; i++) aux->galhos[i] = NULL;
         Tree->raiz = aux;//faço a arvore receber seu primeiro node
         return aux;
     }
@@ -90,37 +91,31 @@ Node getNodeRadialT(RadialTree t, double x, double y, double epsilon){
     }
 }
 
-void removeNoRadialT(RadialTree* t, Node n){
-    _rTree* Tree = (_rTree*)(*t);
+void removeNoRadialT(RadialTree t, Node n){
+    _rTree* Tree = (_rTree*)t;
 
     if(n != NULL){
     _node* aux = (_node*) n;
-
     aux->removido = true;
+
     Tree->degeneradas++;
-
-        printf(" %d %d\n",Tree->degeneradas,Tree->celulas);
         if((double)Tree->degeneradas/Tree->celulas >= (double)Tree->degradacao){
-            //  printf(" \n   REORGANIZA   ");
-
-            // (*t) = (_rTree*)ReorganizaRadialT(Tree);
-            // AbreEscritaDot("DOT.DOT");
-            // printDotRadialTree(*t,"DOT.DOT"); 
-            // FechaEscrita("DOT.DOT");
+            Tree = (_rTree*)ReorganizaRadialT(Tree);
         }
+
     }
     else printf("REMOCAO INTERROMPIDA!!!");
 }
 
 RadialTree ReorganizaRadialT(RadialTree t){
-   
     _rTree* Tree = (_rTree*)t;
+   
     double centro[2];
-    CentroRadialTree(t, centro); //Definindo centro ficticio do retangulo
+    CentroRadialTree(Tree, centro); //Definindo centro ficticio do retangulo
     Lista Hortas = createLst(-1);
-
-    visitaProfundidadeRadialT(t,ListaDeHort,Hortas);
+    visitaProfundidadeRadialT(Tree,ListaDeHort,Hortas);
     int num = lengthLst(Hortas);
+
     Iterador K = createIterator(Hortas,false); //Definindo Atualizando a distancia entre os nos e esse ponto
 
     
@@ -138,7 +133,6 @@ RadialTree ReorganizaRadialT(RadialTree t){
     for (int i=0; i < num; i++) {
         insertRadialT(ArvoreAux,get_HortX(VetorArvore[i]), get_HortY(VetorArvore[i]), VetorArvore[i]); //Preenchendo arvore auxiliar
     }
-
     return ArvoreAux;
 }
 

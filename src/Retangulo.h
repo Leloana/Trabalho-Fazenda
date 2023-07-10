@@ -1,6 +1,8 @@
 #ifndef RET_H
 #define RET_H
 
+/*Header com todas as funçoes do geo Retangulo, aqui a forma Retangulo é criada e modificada*/
+
 #include <stdbool.h>
 
 typedef void* Retangulo;

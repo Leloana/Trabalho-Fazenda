@@ -1,6 +1,9 @@
 #ifndef ARQSVG__
 #define ARQSVG__
 
+/*Header para escrever as formas no arquivo svg, possui uma função para escrever cada forma e funçoes para
+percorrer listas e arvores radiais enquanto escreve as figuras no svg desejado*/
+
 #include "Retangulo.h"
 #include "Circulo.h"
 #include "Linha.h"

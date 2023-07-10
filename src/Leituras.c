@@ -107,7 +107,6 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root,double* contabilidade)
     Lista Colheitadeiras = createLst(-1);
     if(qry == NULL)printf(" ERRO AO ABRIR ARQUIVO QRY\n");
     else{
-
         char ** aux ;
         while(!feof(qry)){//enquanto nao acabar arquivo .qry o banco de dados é manipulado
             aux = LeituraLinha(qry, palavras,&n);
@@ -171,6 +170,7 @@ void LerQry(FILE* qry,FILE* txt,FILE* svg,RadialTree root,double* contabilidade)
             } 
         }
         if(!isEmptyLst(Colhido)){
+            //Contabilidade Colhido
             double ContabilidadeColhidos[6] = {0,0,0,0,0,0};
             fold(Colhido,TotalColhido,ContabilidadeColhidos);
             fprintf(txt,"\n\nPanorama final da safra 2023 1 semestre:\n");

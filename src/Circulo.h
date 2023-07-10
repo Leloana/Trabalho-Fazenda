@@ -1,5 +1,8 @@
 #ifndef CIRC_H
 #define CIRC_H
+
+/*Header com todas as funçoes do geo Circulo, aqui a forma Circulo é criada e modificada*/
+
 #include <stdio.h>
 #include <stdlib.h>
 

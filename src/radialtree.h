@@ -99,7 +99,7 @@ Node getNodeRadialT(RadialTree t, double x, double y, double epsilon);
  * Retorna NULL caso nao tenha encontrado o no'.
  */
 RadialTree ReorganizaRadialT(RadialTree t);
-void removeNoRadialT(RadialTree* t, Node n);
+void removeNoRadialT(RadialTree t, Node n);
 /*
  * Marca como removido o no' n. Caso, apos a remocao, o fator de degradacao
  * superar o limiar definido na criacao, a arvore e' recriada sem os nos delidos.

@@ -1,6 +1,8 @@
 #ifndef FUNC_LEIT_
 #define FUNC_LEIT_
 
+/*Header para ser usada em "Leituras.c", aqui estao todos os comandos do arquivo qry*/
+
 #include "radialtree.h"
 #include <stdio.h>
 #include "lista.h"
@@ -31,10 +33,12 @@ bool checaDentro75(void* Atingido,void* Atual,double* acerto);
 /*Acontece semelhante a "Plague", porem o valor repassado pela funcao "checaDentro75" é somado ao peso atual da hortaliça*/
 void Cure(FILE* txt,FILE* svg, RadialTree root,double X,double Y,
 double weight,double height,double ratio);
-
+//funcao de semear a area
 void seeding(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double factor,
 double weight,double height,double Dx, double Dy, int j);
-
+/*Pega um vetor de inteiros e multiplica o valor do vetor pelo fator de multiplicação, aproxima o resultado
+para baixo e baseado no valor cria replicas da planta dentro da area delimitada por x1,y1,x2,y2.
+A posição das réplicas é aleatoria*/
 void sementesGeradas(FILE*txt,RadialTree root,Lista atingidos,int quantidade[7],
 double factor, double x1,double y1,double x2,double y2,int j);
 /*Reporta os dados da figura de identificado "ID", ela utiliza a funcao "procuraNoRadialT" passando o ID
@@ -45,13 +49,11 @@ ao usar a funcao "set_Colheita" como true*/
 void setColheitadeira(RadialTree root,int ID,Lista _Colheitadeiras);
 /*usa a funcao de visita em profundidade de "radialtree.h" passando a funcao "RepColhe" como parametro*/
 void ReportaColheitadeiras(FILE* txt,Lista _Colheitadeiras);
-
+//Fertiliza area
 void fertilizing(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight,double height,double ratio);
-
-// bool checaDentroAdubo(void* atingida, void* adubo);
-
+//Checa se a figura atual esta completamente dentro da area de x1,y1,x2,y2.
 bool CheckArea(void* atual, double x1, double y1, double x2, double y2);
-
+//Atualiza o peso das hortalicas baseando-se na % praguejada e no adubo
 void atualizaPeso(void* hortalica);
 
 #endif

@@ -11,7 +11,7 @@ void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
     Forma imagem = get_HortaFigura(_hortalica);
 
     if(_hortalica != NULL){
-    removeNoRadialT(&root,getNodeRadialT(root,get_x(imagem),get_y(imagem),0.0000001));
+    removeNoRadialT(root,getNodeRadialT(root,get_x(imagem),get_y(imagem),0.0000001));
     
     reporta_figura(txt,imagem);
     fprintf(txt,"\nCOORDENADA INICIAL = (%lf,%lf)", get_x(imagem), get_y(imagem));
@@ -107,7 +107,7 @@ double AnaliseDeColheita(FILE* txt,RadialTree root,double x1, double y1,
                 insertLst(ColhidosTotal,hortalica);
                 contabilidade += get_HortaP_Atual(hortalica);
                 reporta_figura(txt,checkFarm);//reporta no txt
-                removeNoRadialT(&root,removido);//remove nó
+                removeNoRadialT(root,removido);//remove nó
             }
         }
         killIterator(Nos_Colhidos,K);
@@ -155,7 +155,7 @@ void Plague(FILE* txt,FILE* svg, RadialTree root,double X,double Y,double weight
                         if(get_HortPraga(Atingido) > 0.75){
                         Texto morte = criaTexto(-1,get_x(get_HortaFigura(Atingido)),get_y(get_HortaFigura(Atingido)),"#FF0000","#FF0000","m","x");
                         escreveTextoSvg(svg,morte);
-                        removeNoRadialT(&root,No_atual);
+                        removeNoRadialT(root,No_atual);
                         killTexto(morte); 
                         fprintf(txt,"\nA planta ID = %d morreu de pragas",get_ID(get_HortaFigura(Atingido)));
                     }
