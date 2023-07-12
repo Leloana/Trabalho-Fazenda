@@ -153,13 +153,13 @@ bool getNodesDentroRegiaoRadialT(RadialTree t, double x1, double y1, double x2, 
         }
         for(int i=0;i<Tree->setores;i++){
         //SE O RETANGULO ESTIVER NESTE SETOR CONTINUE SE NAO VOLTA O LOOP
-            if(ChecaRetSetor(raiz->x,raiz->y,x1,y1,x2,y2,Tree->setores,i)){
+            // if(ChecaRetSetor(raiz->x,raiz->y,x1,y1,x2,y2,Tree->setores,i)){
 
                 _rTree aux;
                 aux.raiz = raiz->galhos[i];
                 aux.setores = Tree->setores;
                 getNodesDentroRegiaoRadialT(&aux,x1,y1,x2,y2,L);
-            }
+            // }
         }
     }
     if(!isEmptyLst(L))return true;

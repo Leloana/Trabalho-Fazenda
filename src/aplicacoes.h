@@ -8,7 +8,9 @@
 #include "formas.h"
 #include <math.h>
 
-/*Essa header contem funçoes um pouco mais gerais, que foram usadas pouco e nao tem um uso muito especifico*/
+/*Essa header contem funções gerais , que auxiliam em varias .c diferentes do codigo, como a de encontrar o ID 
+da figura*/
+
 //Passa os argumentos que serao pegos do argv da chamada
 void PassaArgs(char** PathSaida, char** PathEntrada, char** NomeGeo, char** NomeQry, int* Ns, double* Fd, int argc, char** argv);
 //junta o nomeGeo ao NomeQry fazendo as mudanças necessarias

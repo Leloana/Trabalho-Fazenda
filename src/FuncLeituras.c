@@ -5,6 +5,7 @@
 #include "aplicacoes.h"
 #include <math.h>
 #include <time.h>
+#define pi 3.14159265359
 
 void LinhaMove(FILE* txt,RadialTree root,int ID,double X,double Y){
     Horta _hortalica = Teste_achaIDNaArvore(root,ID);

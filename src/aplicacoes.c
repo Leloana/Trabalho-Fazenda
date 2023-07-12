@@ -3,7 +3,6 @@
 #include "arqsvg.h"
 #include "FuncLeituras.h"
 #include <string.h>
-/*Ess*/
 
 void PassaArgs(char** PathSaida, char** PathEntrada, char** NomeGeo, char** NomeQry, int* Ns, double* Fd, int argc, char** argv){
     int i=1;
@@ -114,31 +113,17 @@ Horta Teste_achaIDNaArvore(RadialTree t, int ID){
 
 int Setor(int setores, double xCentro, double yCentro, double a, double b) {
 
-    double distancia = sqrt(pow(xCentro-a, 2) + pow(yCentro-b, 2)); //distancia entre o ponto central e o ponto (a,b)
-    double xr1, yr1, xr2, yr2;
-    double angulo = 360/setores * pi/180;
-    if(setores == 1){
-        return 0;
-    }
-    else if(setores == 2){
-        if( yCentro < b )return 0;
-        else return 1;
-    }
-    else{
-    for (int i=0; i<setores; i++) {
-        //Definindo pontos das retas auxiliares 1 e 2
-        xr1 = xCentro + distancia * cos(angulo * i);
-        yr1 = yCentro + distancia * sin(angulo * i);
-        xr2 = xCentro + distancia * cos(angulo * (i+1));
-        yr2 = yCentro + distancia * sin(angulo * (i+1));
+    double anguloSetor = 2 * pi / setores; // Ângulo do setor circular em radianos
 
-        double distanciaRetas = sqrt(pow(xr1 - xr2, 2) + pow(yr1 - yr2, 2)); //Distancia entre os pontos mais distantes de cada reta auxiliar em relação ao ponto central
-        double distanciaR1 = sqrt(pow(a - xr1, 2) + pow(b - yr1, 2)); //Distancia entre o ponto (a,b) e do ponto mais distante da reta 1 em relação ao ponto central
-        double distanciaR2 = sqrt(pow(a - xr2, 2) + pow(b - yr2, 2)); //Distancia entre o ponto (a,b) e do ponto mais distante da reta 2 em relação ao ponto central
+    // Calcula o ângulo do ponto (a, b) em relação ao ponto central (x, y)
+    double anguloPonto = atan2(b - yCentro, a - xCentro);
+    if (anguloPonto < 0) {
+        anguloPonto += 2 * pi; // Ajusta o ângulo para o intervalo [0, 2pi)
+    }
 
-        if (distanciaR1 <= distanciaRetas && distanciaR2 <= distanciaRetas) return i;
-    }
-    }
+    // Calcula o índice do setor em que o ponto está
+    int indiceSetor = (int) (anguloPonto / anguloSetor);
+    return indiceSetor;
 }
 
 bool DentroRegiaoRet(double X,double Y,double x1, double y1, double x2, double y2){
